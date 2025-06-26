@@ -1,0 +1,111 @@
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+}
+
+.sidebar-header {
+    height: var(--header-height);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sidebar-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.sessions-list {
+    flex: 1;
+    overflow-y: hidden;
+    padding: 0 16px 16px;
+}
+
+.session-item {
+    padding: 12px 16px;
+    margin-bottom: 4px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.session-item:hover {
+    background: var(--surface);
+}
+
+.session-item.active {
+    background: var(--surface-hover);
+    border: 1px solid var(--border);
+}
+
+.session-item .title {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.session-item.active .title {
+    color: var(--text-primary);
+}
+
+.session-type-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+.session-item .menu-btn {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.session-item:hover .menu-btn {
+    opacity: 1;
+}
+
+.session-item .menu-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+.sidebar-footer {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+}
+
+.sidebar-version {
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+}

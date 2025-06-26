@@ -1,0 +1,39 @@
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        height: 100%;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .translation-container {
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .language-selector {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+    
+    .language-selector select {
+        background: var(--surface);
+        border: 1px solid var(--border);
+    }
+    
+    .detected-language {
+        margin-left: 0;
+        text-align: center;
+    }
+    .detected-language:empty {
+        display: none;
+    }
+}
