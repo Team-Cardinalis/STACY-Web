@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>STACY</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
+        <style>
+            .doc-progress-container {
+                padding: 40px;
+                text-align: center;
+                background: var(--background);
+                border-radius: 12px;
+                margin: 20px;
+            }
+            
+            .doc-progress-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            
+            .doc-progress-header h3 {
+                margin: 0;
+                color: var(--text-primary);
+                font-size: 18px;
+                font-weight: 600;
+            }
+            
+            .progress-text {
+                color: var(--text-secondary);
+                font-size: 14px;
+            }
+            
+            .progress-bar {
+                width: 100%;
+                height: 8px;
+                background: var(--border);
+                border-radius: 4px;
+                overflow: hidden;
+                margin-bottom: 12px;
+            }
+            
+            .progress-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #3b82f6, #06b6d4);
+                border-radius: 4px;
+                transition: width 0.3s ease;
+            }
+            
+            .progress-percentage {
+                font-size: 24px;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 20px;
+            }
+            
+            .current-paragraph {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 16px;
+                text-align: left;
+                margin-top: 20px;
+            }
+            
+            .current-paragraph strong {
+                color: var(--text-primary);
+                display: block;
+                margin-bottom: 8px;
+            }
+            
+            .paragraph-preview {
+                color: var(--text-secondary);
+                font-size: 14px;
+                line-height: 1.5;
+                margin: 0;
+                font-style: italic;
+            }
+        </style>
+    </head>
+    <body>
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <div class="brand">
+                    <div class="logo"></div>
+                    <div class="model-selector">
+                        <button class="model-selector-button" id="model-selector-button">
+                            <h1>STACY</h1>
+                            <span id="current-model">BETA</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="model-selector-dropdown" id="model-selector-dropdown">
+                            <div class="model-option selected" data-model="BETA">
+                                <div class="model-option-name">BETA</div>
+                                <div class="model-option-description">Beta version of the translation model</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <button class="new-session-btn">
+                <span>+</span>
+                New Session
+            </button>
+            
+            <div class="sessions-list" id="sessions">
+            </div>
+            
+            <footer class="sidebar-footer">
+                <span class="sidebar-version" id="sidebar-version">v0.1.0</span>
+            </footer>
+        </aside>
+
+        <main class="main-content">
+            <div class="translation-container" id="translation-container">
+                <div class="translation-section">
+                    <div class="section-header">
+                        <div class="section-title">Source Text</div>
+                        <div class="language-selector">
+                            <select id="source-lang">
+                                <option value="AUTO">Auto-detect</option>
+                                <option value="fr">French</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <textarea 
+                            class="translation-textarea" 
+                            id="source-text" 
+                            placeholder="Enter text to translate..."
+                        ></textarea>
+                    </div>
+                    <div class="section-footer">
+                        <div class="char-count" id="char-count">0 characters</div>
+                        <div class="detected-language" id="detected-lang"></div>
+                    </div>
+                </div>
+                
+                <div class="translation-section">
+                    <div class="section-header">
+                        <div class="section-title">Translation</div>
+                        <div class="language-selector">
+                            <select id="target-lang">
+                                <option value="fr">French</option>
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <textarea 
+                            class="translation-textarea" 
+                            id="target-text" 
+                            placeholder="Translation will appear here..."
+                            readonly
+                        ></textarea>
+                    </div>
+                    <div class="section-footer">
+                        <button class="translate-btn" id="translate-btn">
+                            Translate
+                        </button>
+                        <div style="margin-left: auto; display: flex; gap: 8px;">
+                            <button class="translate-btn" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary);" onclick="copyTranslation()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Document Processing Mode (new) -->
+            <div class="doc-container" id="doc-container" style="display: none;">
+                <div class="doc-section doc-source-section">
+                    <div class="section-header">
+                        <div class="doc-toolbar">
+                            <button class="toolbar-btn" id="doc-bold-btn" title="Bold">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                                    <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                                </svg>
+                            </button>
+                            <button class="toolbar-btn" id="doc-italic-btn" title="Italic">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 4h-9M14 20H5M15 4L9 20"/>
+                                </svg>
+                            </button>
+                            <button class="toolbar-btn" id="doc-underline-btn" title="Underline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/>
+                                    <line x1="4" y1="21" x2="20" y2="21"/>
+                                </svg>
+                            </button>
+                            <div class="toolbar-divider"></div>
+                            <button class="toolbar-btn" id="doc-clear-format-btn" title="Clear formatting">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+                                    <line x1="6" y1="4" x2="20" y2="20"/>
+                                    <line x1="6" y1="20" x2="10" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="toolbar-btn" id="doc-word-count-btn" title="Word count">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14,2 14,8 20,8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="language-selector">
+                            <select id="doc-source-lang">
+                                <option value="AUTO">Auto-detect</option>
+                                <option value="fr">French</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <div class="doc-editor-container">
+                            <div 
+                                class="doc-editor" 
+                                id="doc-source-editor"
+                                contenteditable="true"
+                                data-placeholder="Paste or type your document text here..."
+                            ></div>
+                            <textarea 
+                                class="doc-textarea-hidden" 
+                                id="doc-source-text"
+                                style="display: none;"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="section-footer">
+                        <div class="doc-stats">
+                            <span id="doc-char-count">0 characters</span>
+                            <span class="separator">•</span>
+                            <span id="doc-word-count">0 words</span>
+                            <span class="separator">•</span>
+                            <span id="doc-paragraph-count">0 paragraphs</span>
+                        </div>
+                        <button class="translate-btn" id="doc-translate-btn">
+                            Translate Document
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="doc-section doc-preview-section">
+                    <div class="section-header">
+                        <div class="language-selector">
+                            <select id="doc-target-lang">
+                                <option value="fr">French</option>
+                                <option value="en" selected>English</option>
+                                <option value="es">Spanish</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ar">Arabic</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <div class="doc-preview" id="doc-preview">
+                            <div class="doc-preview-placeholder">
+                                <div class="doc-placeholder-icon"></div>
+                                <p>Document translation will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-footer">
+                        <button class="translate-btn" style="background: transparent; border: 1px solid var(--border); color: var(--text-secondary);" onclick="exportDocumentToPDF()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                            Export PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="modal-overlay" id="welcome-modal" style="display: none;">
+            <div class="modal">
+                <h2>Welcome to STACY</h2>
+                <div class="beta-badge">BETA</div>
+                <p>STACY is an advanced AI translator that uses the latest neural translation technologies to provide accurate and natural translations.</p>
+                <p>This beta version may contain some bugs. Your feedback is valuable to help us improve the experience.</p>
+                <button class="modal-btn" onclick="closeWelcomeModal()">Get Started</button>
+            </div>
+        </div>
+
+        <script src="js/api.js"></script>
+        <script src="js/icons.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/sessions.js"></script>
+        <script src="js/translation.js"></script>
+        <script src="js/document.js"></script>
+        <script src="js/models.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/version.js"></script>
+    </body>
+</html>
