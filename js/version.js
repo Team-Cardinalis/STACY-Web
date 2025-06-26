@@ -5,8 +5,25 @@
         const repoOwner = "team-cardinalis";
         const repoName = "STACY-Web";
         const branch = "main";
-
         let baseVersion = "0.0.0";
+
+        const cacheKey = "version";
+        const cache = JSON.parse(localStorage.getItem(cacheKey) || "{}");
+
+        const commitsUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/commits?sha=${branch}&per_page=1&page=1`;
+        const commitsResp = await fetch(commitsUrl);
+        if (!commitsResp.ok) throw new Error("GitHub API error");
+        const latestCommits = await commitsResp.json();
+        const latestCommit = latestCommits[0];
+        const latestCommitDate = latestCommit?.commit?.committer?.date;
+
+        if (
+            cache.lastCommitDate === latestCommitDate &&
+            typeof cache.version === "string"
+        ) {
+            if (el) el.textContent = cache.version;
+            return;
+        }
 
         let commits = [];
         let page = 1;
@@ -48,7 +65,16 @@
             }
         }
 
-        if (el) el.textContent = `v${major}.${minor}.${patch}`;
+        const versionStr = `v${major}.${minor}.${patch}`;
+        if (el) el.textContent = versionStr;
+
+        localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+                lastCommitDate: latestCommitDate,
+                version: versionStr
+            })
+        );
     } catch (error) {
         console.error("Error fetching version info:", error);
         const el = document.getElementById("sidebar-version");
