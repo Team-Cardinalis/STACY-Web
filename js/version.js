@@ -78,6 +78,13 @@
     } catch (error) {
         console.error("Error fetching version info:", error);
         const el = document.getElementById("sidebar-version");
-        if (el) el.textContent = "error";
+        const cache = JSON.parse(localStorage.getItem("version") || "{}");
+        if (el) {
+            if (typeof cache.version === "string") {
+                el.textContent = cache.version;
+            } else {
+                el.textContent = "error";
+            }
+        }
     }
 })();
