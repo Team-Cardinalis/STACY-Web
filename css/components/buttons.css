@@ -143,3 +143,32 @@
 .modal-btn:hover {
     background: var(--accent-hover);
 }
+
+.copy-btn,
+.export-pdf-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.5px;
+}
+
+.copy-btn:hover,
+.export-pdf-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text-primary);
+}
+
+.copy-btn:disabled,
+.export-pdf-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

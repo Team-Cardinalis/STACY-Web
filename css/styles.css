@@ -10,6 +10,8 @@
 @import url('components/modals.css');
 @import url('components/avatars.css');
 @import url('responsive.css');
+@import url('components/doc-progress.css');
+@import url('components/inline-moves.css');
 
 *, *::before, *::after { 
     box-sizing: border-box; 
