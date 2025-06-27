@@ -300,7 +300,7 @@ const exportDocumentToPDF = () => {
         const printContent = `
             <html>
                 <head>
-                    <title>${currentSession.title} - Translation</title>
+                    <title>Document</title>
                     <style>
                         body { 
                             font-family: Arial, sans-serif; 
@@ -309,12 +309,6 @@ const exportDocumentToPDF = () => {
                             font-size: 14px;
                             color: #333;
                         }
-                        h1 {
-                            color: #2563eb;
-                            border-bottom: 2px solid #e5e7eb;
-                            padding-bottom: 10px;
-                            margin-bottom: 30px;
-                        }
                         p {
                             margin-bottom: 16px;
                             text-align: justify;
@@ -322,7 +316,6 @@ const exportDocumentToPDF = () => {
                     </style>
                 </head>
                 <body>
-                    <h1>${currentSession.title}</h1>
                     ${translatedText.split('\n\n').map(p => `<p>${p}</p>`).join('')}
                 </body>
             </html>

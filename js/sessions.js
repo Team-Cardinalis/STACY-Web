@@ -13,7 +13,6 @@ try {
     const stored = localStorage.getItem("sessions");
     sessions = stored ? JSON.parse(stored) : [];
     if (!Array.isArray(sessions)) {
-        console.error("Invalid sessions data in localStorage, resetting");
         sessions = [];
     }
     sessions.forEach(session => {
@@ -22,7 +21,6 @@ try {
         }
     });
 } catch (error) {
-    console.error("Error loading sessions from localStorage:", error);
     sessions = [];
 }
 
@@ -30,7 +28,6 @@ const save = () => {
     try {
         localStorage.setItem("sessions", JSON.stringify(sessions));
     } catch (error) {
-        console.error("Error saving sessions to localStorage:", error);
         showError(new Error("Failed to save session data"));
     }
 };
@@ -55,7 +52,6 @@ const addSession = (title, type = SESSION_TYPES.FAST) => {
         renderSessions();
         setCurrentSession(0);
     } catch (error) {
-        console.error("Error adding session:", error);
         showError(new Error("Failed to create new session"));
     }
 };
@@ -69,13 +65,13 @@ const showSessionTypeModal = () => {
         const documentIcon = getIcon('documentLarge', 'icon-accent');
         
         modal.innerHTML = `
-            <div class="modal">
+            <div class="modal" tabindex="0">
                 <h2>Choose Session Type</h2>
                 <div class="session-type-options">
                     <div class="session-type-option" data-type="${SESSION_TYPES.FAST}">
                         <div class="session-type-icon">${lightningIcon}</div>
                         <div class="session-type-title">Fast</div>
-                        <div class="session-type-description">Quick text translation (current mode)</div>
+                        <div class="session-type-description">Quick text translation</div>
                     </div>
                     <div class="session-type-option" data-type="${SESSION_TYPES.DOC}">
                         <div class="session-type-icon">${documentIcon}</div>
@@ -83,12 +79,32 @@ const showSessionTypeModal = () => {
                         <div class="session-type-description">Document processing with PDF output</div>
                     </div>
                 </div>
-                <button class="modal-btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
             </div>
         `;
         
         document.body.appendChild(modal);
-        
+
+        const modalBox = modal.querySelector('.modal');
+        if (modalBox) modalBox.focus();
+
+        modal.addEventListener('mousedown', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+
+        const escListener = (e) => {
+            if (e.key === "Escape") {
+                modal.remove();
+                document.removeEventListener('keydown', escListener);
+            }
+        };
+        document.addEventListener('keydown', escListener);
+
+        modal.addEventListener('remove', () => {
+            document.removeEventListener('keydown', escListener);
+        });
+
         modal.querySelectorAll('.session-type-option').forEach(option => {
             option.onclick = () => {
                 const type = option.dataset.type;
@@ -98,7 +114,6 @@ const showSessionTypeModal = () => {
         });
         
     } catch (error) {
-        console.error("Error showing session type modal:", error);
         showError(new Error("Failed to show session type selection"));
     }
 };
@@ -121,7 +136,6 @@ const deleteSession = index => {
             renderSessions();
         }
     } catch (error) {
-        console.error("Error deleting session:", error);
         showError(new Error("Failed to delete session"));
     }
 };
@@ -170,7 +184,6 @@ const renameSession = index => {
         });
         input.addEventListener('blur', finish);
     } catch (error) {
-        console.error("Error renaming session:", error);
         showError(new Error("Failed to rename session"));
     }
 };
@@ -178,7 +191,6 @@ const renameSession = index => {
 const renderSessions = () => {
     try {
         if (!DOM.sessionsEl) {
-            console.error("Sessions element not found");
             return;
         }
         
@@ -204,7 +216,6 @@ const renderSessions = () => {
                             setCurrentSession(index);
                         }
                     } catch (error) {
-                        console.error("Error handling session click:", error);
                     }
                 };
                 
@@ -215,18 +226,15 @@ const renderSessions = () => {
                             e.stopPropagation();
                             showSessionMenu(sessionDiv, index);
                         } catch (error) {
-                            console.error("Error handling menu click:", error);
                         }
                     };
                 }
                 
                 DOM.sessionsEl.appendChild(sessionDiv);
             } catch (error) {
-                console.error(`Error rendering session ${index}:`, error);
             }
         });
     } catch (error) {
-        console.error("Error rendering sessions:", error);
         showError(new Error("Failed to display sessions"));
     }
 };
@@ -234,13 +242,12 @@ const renderSessions = () => {
 const setCurrentSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
-            console.error("Invalid session index:", index);
             return;
         }
 
         currentSessionIndex = index;
         try {
-            localStorage.setItem("stacy_currentSessionIndex", String(index));
+            localStorage.setItem("currentSessionIndex", String(index));
         } catch (e) {
         }
         renderSessions();
@@ -252,7 +259,6 @@ const setCurrentSession = index => {
 
         loadSessionData();
     } catch (error) {
-        console.error("Error setting current session:", error);
         showError(new Error("Failed to switch session"));
     }
 };
@@ -285,7 +291,6 @@ const loadSessionData = () => {
             }
         } else {
             if (!DOM.srcText || !DOM.tgtText || !DOM.srcSel || !DOM.tgtSel || !DOM.charCount) {
-                console.error("Required DOM elements not found for loading session data");
                 return;
             }
             
@@ -296,12 +301,15 @@ const loadSessionData = () => {
             
             DOM.charCount.textContent = `${DOM.srcText.value.length} characters`;
             
-            if (typeof updateDetectedLanguage === 'function') {
+            if (DOM.srcSel.value === "AUTO" && typeof updateDetectedLanguage === 'function') {
                 updateDetectedLanguage();
+            } else if (DOM.detectedLangEl) {
+                DOM.detectedLangEl.textContent = "";
+                DOM.detectedLangEl.style.color = "";
+                DOM.detectedLangEl.style.display = "none";
             }
         }
     } catch (error) {
-        console.error("Error loading session data:", error);
         showError(new Error("Failed to load session data"));
     }
 };
@@ -318,7 +326,6 @@ const saveSessionData = () => {
             }
         } else {
             if (!DOM.srcText || !DOM.tgtText || !DOM.srcSel || !DOM.tgtSel) {
-                console.error("Required DOM elements not found for saving session data");
                 return;
             }
             
@@ -330,7 +337,6 @@ const saveSessionData = () => {
         
         save();
     } catch (error) {
-        console.error("Error saving session data:", error);
     }
 };
 

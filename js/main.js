@@ -36,7 +36,7 @@ const init = async () => {
             }
             let lastIndex = 0;
             try {
-                const storedIndex = localStorage.getItem("stacy_currentSessionIndex");
+                const storedIndex = localStorage.getItem("currentSessionIndex");
                 if (storedIndex !== null && !isNaN(storedIndex) && sessions[storedIndex]) {
                     lastIndex = parseInt(storedIndex, 10);
                 }
@@ -91,6 +91,10 @@ try {
                                     DOM.translateBtn.textContent = "Translate";
                                 }
                             }
+                        } else if (DOM.translateBtn) {
+                            // Always enable and reset button if not in AUTO mode
+                            DOM.translateBtn.disabled = false;
+                            DOM.translateBtn.textContent = "Translate";
                         }
                     } catch (error) {
                         console.error("Error updating translate button state:", error);
@@ -114,6 +118,12 @@ try {
             } catch (error) {
                 console.error("Error in keydown handler:", error);
             }
+        });
+    }
+    // Ajout : mettre à jour la détection de langue lors du changement de la langue source
+    if (DOM.srcSel) {
+        DOM.srcSel.addEventListener("change", () => {
+            updateDetectedLanguage();
         });
     }
 } catch (error) {

@@ -43,9 +43,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    text-align: center; /* Ajouté pour centrer le texte */
+    text-align: center;
     text-align-last: center;
-    /* Pour Firefox */
 }
 
 .language-selector select:hover {
@@ -58,7 +57,7 @@
     color: var(--text-primary);
     padding: 8px 12px;
     border: none;
-    text-align: center; /* Ajouté pour centrer le texte */
+    text-align: center;
 }
 
 .language-selector select option:hover,
@@ -70,8 +69,8 @@
 
 .language-selector select option:checked {
     border: none;
-    background: var(--accent);
-    color: white;
+    background: var(--surface-hover);
+    color: var(--text-primary);
 }
 
 .language-selector .arrow {
@@ -87,10 +86,6 @@
     background: var(--surface);
     border-radius: 6px;
     transition: var(--transition);
-}
-
-.detected-language:empty {
-    display: none;
 }
 
 .detected-language[style*="--error"] {
@@ -363,6 +358,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-muted);
+    transition: color var(--transition);
+}
+
+.session-type-option:hover .session-type-icon {
+    color: var(--item-active);
 }
 
 .session-type-title {
@@ -378,32 +379,6 @@
     line-height: 1.4;
 }
 
-.modal-btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    padding: 12px 24px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: var(--transition);
-    margin-top: 16px;
-}
-
-.modal-btn-secondary:hover {
-    border-color: var(--text-muted);
-    background: var(--surface);
-}
-
-.icon-accent {
-    color: var(--accent);
-}
-
-.icon-muted {
-    color: var(--text-muted);
-}
-
 .session-icon {
     color: var(--text-secondary);
     opacity: 0.7;
@@ -412,10 +387,6 @@
 .session-item.active .session-icon {
     color: var(--item-active);
     opacity: 1;
-}
-
-.icon-accent {
-    color: var(--item-active);
 }
 
 .session-title-input {

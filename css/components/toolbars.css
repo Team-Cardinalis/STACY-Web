@@ -1,0 +1,31 @@
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.toolbar-btn:hover {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.toolbar-btn.active {
+    background: var(--accent);
+    color: white;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 4px;
+}

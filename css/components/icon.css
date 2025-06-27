@@ -1,0 +1,7 @@
+.icon-accent {
+    color: var(--item-active);
+}
+
+.icon-muted {
+    color: var(--text-muted);
+}

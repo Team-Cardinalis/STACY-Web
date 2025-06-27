@@ -1,0 +1,41 @@
+
+.input-area {
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+}
+
+.input-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.input-wrapper textarea {
+    width: 100%;
+    min-height: 60px;
+    max-height: 200px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    transition: var(--transition);
+}
+
+.input-wrapper textarea:focus {
+    outline: none;
+    border-color: var(--border);
+}
+
+.input-wrapper textarea::placeholder {
+    color: var(--text-muted);
+}
