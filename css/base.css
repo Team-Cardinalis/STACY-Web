@@ -35,3 +35,16 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--surface-hover);
 }
+
+@supports (window-controls-overlay: overlay) {
+  :root {
+    --titlebar-area-height: env(window-controls-overlay-inset-top, 0px);
+  }
+  .my-titlebar {
+    height: var(--titlebar-area-height);
+    -webkit-app-region: drag;
+  }
+  .window-buttons {
+    -webkit-app-region: no-drag;
+  }
+}
