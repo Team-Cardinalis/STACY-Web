@@ -4,6 +4,7 @@
   "description": "Smart Translation And Communication Yield",
   "start_url": ".",
   "display": "standalone",
+  "orientation": "landscape",
   "background_color": "#ffffff",
   "theme_color": "#2d2d2d",
   "icons": [
@@ -12,5 +13,7 @@
       "sizes": "any",
       "type": "image/svg+xml"
     }
-  ]
+  ],
+  "display_override": ["window-controls-overlay","standalone"],
+  "window_controls_overlay": { "mode": "overlay" }
 }
