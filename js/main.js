@@ -2,6 +2,28 @@
 
 const init = async () => {
     try {
+        // Determine the session type early to prevent visual jump
+        let initialSessionType = 'fast';
+        if (sessions.length > 0) {
+            let lastIndex = 0;
+            try {
+                const storedIndex = localStorage.getItem("currentSessionIndex");
+                if (storedIndex !== null && !isNaN(storedIndex) && sessions[storedIndex]) {
+                    lastIndex = parseInt(storedIndex, 10);
+                }
+            } catch (e) {
+                // Ignore errors
+            }
+            if (sessions[lastIndex]) {
+                initialSessionType = sessions[lastIndex].type || 'fast';
+            }
+        }
+        
+        // Set initial UI state immediately
+        if (typeof switchToSessionType === 'function') {
+            switchToSessionType(initialSessionType);
+        }
+        
         try {
             await loadModels();
         } catch (error) {
@@ -41,9 +63,12 @@ const init = async () => {
                     lastIndex = parseInt(storedIndex, 10);
                 }
             } catch (e) {
+                // Ignore errors
             }
             currentSessionIndex = lastIndex;
             renderSessions();
+            
+            // Ensure UI is in correct state (redundant but safe)
             if (sessions[currentSessionIndex] && typeof switchToSessionType === 'function') {
                 switchToSessionType(sessions[currentSessionIndex].type || 'fast');
             }

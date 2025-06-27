@@ -15,6 +15,7 @@ const MobileHandler = {
         this.setupClickOutside();
         this.setupResizeHandler();
         this.setupKeyboardHandling();
+        this.setupFloatingButtons();
     },
 
     checkMobile() {
@@ -58,6 +59,7 @@ const MobileHandler = {
         try {
             const sidebar = document.querySelector(".sidebar");
             const mainContent = document.querySelector(".main-content");
+            const floatingActions = document.getElementById("floating-actions");
             if (!sidebar || !mainContent) return;
 
             this.sidebarOpen = !this.sidebarOpen;
@@ -68,6 +70,11 @@ const MobileHandler = {
                 this.backdrop.classList.toggle("active", this.sidebarOpen);
             }
             mainContent.classList.toggle("blurred", this.sidebarOpen);
+            
+            // Hide/show floating buttons
+            if (floatingActions) {
+                floatingActions.classList.toggle("sidebar-open", this.sidebarOpen);
+            }
             
             // Update toggle button appearance
             const toggleBtn = document.getElementById("mobile-sidebar-toggle");
@@ -86,6 +93,7 @@ const MobileHandler = {
         try {
             const sidebar = document.querySelector(".sidebar");
             const mainContent = document.querySelector(".main-content");
+            const floatingActions = document.getElementById("floating-actions");
             if (!sidebar || !this.sidebarOpen) return;
 
             this.sidebarOpen = false;
@@ -97,6 +105,11 @@ const MobileHandler = {
             }
             if (mainContent) {
                 mainContent.classList.remove("blurred");
+            }
+            
+            // Show floating buttons
+            if (floatingActions) {
+                floatingActions.classList.remove("sidebar-open");
             }
             
             document.body.style.overflow = '';
@@ -198,6 +211,53 @@ const MobileHandler = {
             });
         } catch (error) {
             console.error("Error setting up keyboard handling:", error);
+        }
+    },
+
+    setupFloatingButtons() {
+        try {
+            const mobileCopyBtn = document.getElementById("mobile-copy-btn");
+            const mobileExportBtn = document.getElementById("mobile-export-btn");
+            
+            if (mobileCopyBtn) {
+                mobileCopyBtn.addEventListener('click', () => {
+                    try {
+                        if (typeof copyTranslation === 'function') {
+                            copyTranslation();
+                            this.showFloatingButtonFeedback(mobileCopyBtn, 'success');
+                        }
+                    } catch (error) {
+                        console.error("Error copying translation:", error);
+                    }
+                });
+            }
+            
+            if (mobileExportBtn) {
+                mobileExportBtn.addEventListener('click', () => {
+                    try {
+                        if (typeof exportDocumentToPDF === 'function') {
+                            exportDocumentToPDF();
+                        }
+                    } catch (error) {
+                        console.error("Error exporting PDF:", error);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error setting up floating buttons:", error);
+        }
+    },
+
+    showFloatingButtonFeedback(button, type) {
+        try {
+            const originalClass = button.className;
+            button.classList.add(type);
+            
+            setTimeout(() => {
+                button.className = originalClass;
+            }, 2000);
+        } catch (error) {
+            console.error("Error showing button feedback:", error);
         }
     },
 

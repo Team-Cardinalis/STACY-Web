@@ -54,6 +54,11 @@
         height: 100%;
         max-height: 100%;
         overflow: hidden;
+        transition: opacity 0.15s ease-in-out;
+    }
+    
+    .translation-container.initialized {
+        opacity: 1;
     }
     
     .translation-section {
@@ -162,42 +167,115 @@
         opacity: 0.5;
     }
     
-    /* Add mobile body class styles */
-    body.mobile {
-        overflow: hidden;
-        height: 100vh;
-        max-height: 100vh;
+    /* Floating Action Buttons */
+    .floating-actions {
         position: fixed;
-        width: 100%;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 998;
     }
     
-    /* Improve touch targets on mobile */
-    .session-item {
-        min-height: 40px;
-        padding: 10px 16px;
+    .floating-btn {
+        width: 56px;
+        height: 56px;
+        background: var(--accent);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        transition: var(--transition), transform 0.3s ease;
+        font-size: 16px;
+        position: relative;
     }
     
-    .session-item .menu-btn {
-        min-width: 36px;
-        min-height: 36px;
-        opacity: 1; /* Always visible on mobile */
+    .floating-btn:hover {
+        background: var(--accent-hover);
+        transform: scale(1.05);
     }
     
-    .session-item .title {
-        font-size: 13px;
+    .floating-btn:active {
+        transform: scale(0.95);
     }
     
-    .session-type-badge {
-        width: 16px;
-        height: 16px;
+    .floating-btn.copy-fab {
+        background: var(--surface);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
     }
     
-    /* Document mode mobile styles */
+    .floating-btn.copy-fab:hover {
+        background: var(--surface-hover);
+    }
+    
+    .floating-btn.export-fab {
+        background: var(--warning);
+    }
+    
+    .floating-btn.export-fab:hover {
+        background: var(--warning-hover, #d97706);
+    }
+    
+    .floating-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .floating-btn.success {
+        background: var(--success, #059669);
+    }
+    
+    /* Hide floating buttons when sidebar is open */
+    .floating-actions.sidebar-open {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+    
+    /* Fast translation mode floating buttons */
+    .translation-container.initialized ~ .floating-actions .translation-fabs {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .translation-container.hide ~ .floating-actions .translation-fabs {
+        display: none;
+    }
+    
+    /* Document mode floating buttons */
+    .doc-container.initialized ~ .floating-actions .doc-fabs {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .doc-container:not(.show) ~ .floating-actions .doc-fabs {
+        display: none;
+    }
+    
+    .translation-section:last-child .section-footer {
+        display: none;
+    }
+    
     .doc-container {
         flex-direction: column;
+        padding: 0;
+        gap: 0;
         height: 100%;
         max-height: 100%;
         overflow: hidden;
+        transition: opacity 0.15s ease-in-out;
+    }
+    
+    .doc-container.initialized {
+        opacity: 1;
     }
     
     .doc-section {
@@ -211,25 +289,71 @@
         border-bottom: none;
     }
     
+    .doc-section:last-child .section-footer {
+        display: none;
+    }
+    
+    .doc-section .section-header {
+        padding: 12px 16px;
+        min-height: 56px;
+        flex-shrink: 0;
+    }
+    
+    .doc-section .section-content {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+    
     .doc-editor {
+        height: 100%;
         min-height: 120px;
         padding: 16px;
         font-size: 16px; /* Prevent zoom on iOS */
     }
     
+    .doc-preview {
+        height: 100%;
+        min-height: 120px;
+        padding: 16px;
+        font-size: 16px;
+    }
+    
+    .doc-section .section-footer {
+        padding: 12px 16px;
+        min-height: 60px;
+        flex-shrink: 0;
+    }
+    
     .doc-toolbar {
-        flex-wrap: wrap;
-        gap: 4px;
+        padding: 0 4px;
+        gap: 2px;
     }
     
     .toolbar-btn {
-        min-width: 40px;
-        min-height: 40px;
+        width: 36px;
+        height: 36px;
+        min-height: 36px;
+    }
+    
+    .doc-stats {
+        font-size: 11px;
+        gap: 6px;
+    }
+    
+    .export-pdf-btn {
+        min-height: 44px;
+        padding: 12px 16px;
+        font-size: 16px;
     }
 }
 
 @media (min-width: 769px) {
     .mobile-sidebar-toggle {
+        display: none;
+    }
+    
+    .floating-actions {
         display: none;
     }
 }

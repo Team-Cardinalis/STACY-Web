@@ -257,6 +257,28 @@
             </svg>
         </button>
         
+        <!-- Floating Action Buttons for Mobile -->
+        <div class="floating-actions" id="floating-actions">
+            <div class="translation-fabs">
+                <button class="floating-btn copy-fab" id="mobile-copy-btn" title="Copy translation">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="doc-fabs" style="display: none;">
+                <button class="floating-btn export-fab" id="mobile-export-btn" title="Export PDF">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
         <script src="js/api.js"></script>
         <script src="js/icons.js"></script>
         <script src="js/ui.js"></script>

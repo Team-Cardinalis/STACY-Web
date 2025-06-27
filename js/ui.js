@@ -147,18 +147,53 @@ const switchToSessionType = (sessionType) => {
     try {
         const translationContainer = DOM.translationContainer;
         const docContainer = DOM.docContainer;
+        const floatingActions = document.getElementById("floating-actions");
         
         if (!translationContainer || !docContainer) {
             console.error("Required containers not found");
             return;
         }
         
+        // Remove previous classes
+        translationContainer.classList.remove('hide', 'initialized');
+        docContainer.classList.remove('show', 'initialized');
+        
         if (sessionType === 'doc') {
             translationContainer.style.display = 'none';
+            translationContainer.classList.add('hide');
             docContainer.style.display = 'flex';
+            docContainer.classList.add('show');
+            
+            // Show/hide appropriate floating buttons
+            if (floatingActions && window.innerWidth <= 768) {
+                const translationFabs = floatingActions.querySelector('.translation-fabs');
+                const docFabs = floatingActions.querySelector('.doc-fabs');
+                if (translationFabs) translationFabs.style.display = 'none';
+                if (docFabs) docFabs.style.display = 'flex';
+            }
+            
+            // Add small delay to ensure display change is applied before opacity
+            setTimeout(() => {
+                docContainer.classList.add('initialized');
+            }, 10);
         } else {
-            translationContainer.style.display = 'flex';
             docContainer.style.display = 'none';
+            docContainer.classList.remove('show');
+            translationContainer.style.display = 'flex';
+            translationContainer.classList.remove('hide');
+            
+            // Show/hide appropriate floating buttons
+            if (floatingActions && window.innerWidth <= 768) {
+                const translationFabs = floatingActions.querySelector('.translation-fabs');
+                const docFabs = floatingActions.querySelector('.doc-fabs');
+                if (translationFabs) translationFabs.style.display = 'flex';
+                if (docFabs) docFabs.style.display = 'none';
+            }
+            
+            // Add small delay to ensure display change is applied before opacity
+            setTimeout(() => {
+                translationContainer.classList.add('initialized');
+            }, 10);
         }
     } catch (error) {
         console.error("Error switching session type:", error);
