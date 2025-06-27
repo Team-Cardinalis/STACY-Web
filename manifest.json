@@ -13,7 +13,5 @@
       "sizes": "any",
       "type": "image/svg+xml"
     }
-  ],
-  "display_override": ["window-controls-overlay","standalone"],
-  "window_controls_overlay": { "mode": "overlay" }
+  ]
 }
