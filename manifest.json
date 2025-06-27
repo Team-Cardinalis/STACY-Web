@@ -4,7 +4,7 @@
   "description": "Smart Translation And Communication Yield",
   "start_url": ".",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#2d2d2d",
   "icons": [
@@ -24,5 +24,6 @@
       "src": "screenshot.png",
       "type": "image/png"
     }
-  ]
+  ],
+  "viewport": "width=device-width, initial-scale=1, viewport-fit=cover"
 }

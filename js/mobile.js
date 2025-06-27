@@ -1,0 +1,241 @@
+"use strict";
+
+const MobileHandler = {
+    isMobile: false,
+    sidebarOpen: false,
+    touchStartX: 0,
+    touchStartY: 0,
+    backdrop: null,
+    
+    init() {
+        this.checkMobile();
+        this.createBackdrop();
+        this.setupSidebarToggle();
+        this.setupTouchGestures();
+        this.setupClickOutside();
+        this.setupResizeHandler();
+        this.setupKeyboardHandling();
+    },
+
+    checkMobile() {
+        this.isMobile = window.innerWidth <= 768;
+        document.body.classList.toggle('mobile', this.isMobile);
+    },
+
+    createBackdrop() {
+        try {
+            // Create backdrop element
+            this.backdrop = document.createElement('div');
+            this.backdrop.className = 'sidebar-backdrop';
+            document.body.appendChild(this.backdrop);
+            
+            // Add click handler to backdrop
+            this.backdrop.addEventListener('click', () => {
+                this.closeSidebar();
+            });
+        } catch (error) {
+            console.error("Error creating backdrop:", error);
+        }
+    },
+
+    setupSidebarToggle() {
+        try {
+            const toggleBtn = document.getElementById("mobile-sidebar-toggle");
+            const sidebar = document.querySelector(".sidebar");
+            
+            if (!toggleBtn || !sidebar) return;
+
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleSidebar();
+            });
+        } catch (error) {
+            console.error("Error setting up sidebar toggle:", error);
+        }
+    },
+
+    toggleSidebar() {
+        try {
+            const sidebar = document.querySelector(".sidebar");
+            const mainContent = document.querySelector(".main-content");
+            if (!sidebar || !mainContent) return;
+
+            this.sidebarOpen = !this.sidebarOpen;
+            sidebar.classList.toggle("open", this.sidebarOpen);
+            
+            // Toggle backdrop and blur
+            if (this.backdrop) {
+                this.backdrop.classList.toggle("active", this.sidebarOpen);
+            }
+            mainContent.classList.toggle("blurred", this.sidebarOpen);
+            
+            // Update toggle button appearance
+            const toggleBtn = document.getElementById("mobile-sidebar-toggle");
+            if (toggleBtn) {
+                toggleBtn.classList.toggle("active", this.sidebarOpen);
+            }
+
+            // Prevent body scroll when sidebar is open
+            document.body.style.overflow = this.sidebarOpen ? 'hidden' : '';
+        } catch (error) {
+            console.error("Error toggling sidebar:", error);
+        }
+    },
+
+    closeSidebar() {
+        try {
+            const sidebar = document.querySelector(".sidebar");
+            const mainContent = document.querySelector(".main-content");
+            if (!sidebar || !this.sidebarOpen) return;
+
+            this.sidebarOpen = false;
+            sidebar.classList.remove("open");
+            
+            // Remove backdrop and blur
+            if (this.backdrop) {
+                this.backdrop.classList.remove("active");
+            }
+            if (mainContent) {
+                mainContent.classList.remove("blurred");
+            }
+            
+            document.body.style.overflow = '';
+            
+            const toggleBtn = document.getElementById("mobile-sidebar-toggle");
+            if (toggleBtn) {
+                toggleBtn.classList.remove("active");
+            }
+        } catch (error) {
+            console.error("Error closing sidebar:", error);
+        }
+    },
+
+    setupTouchGestures() {
+        if (!this.isMobile) return;
+
+        try {
+            // Swipe to open/close sidebar
+            document.addEventListener('touchstart', (e) => {
+                this.touchStartX = e.touches[0].clientX;
+                this.touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!this.sidebarOpen) return;
+                
+                const touchX = e.touches[0].clientX;
+                const diffX = this.touchStartX - touchX;
+                
+                // Close sidebar on swipe left
+                if (diffX > 50 && Math.abs(e.touches[0].clientY - this.touchStartY) < 100) {
+                    this.closeSidebar();
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].clientX;
+                const diffX = touchEndX - this.touchStartX;
+                
+                // Open sidebar on swipe right from left edge
+                if (!this.sidebarOpen && this.touchStartX < 50 && diffX > 100) {
+                    this.toggleSidebar();
+                }
+            }, { passive: true });
+        } catch (error) {
+            console.error("Error setting up touch gestures:", error);
+        }
+    },
+
+    setupClickOutside() {
+        try {
+            document.addEventListener('click', (e) => {
+                if (!this.isMobile || !this.sidebarOpen) return;
+
+                const sidebar = document.querySelector(".sidebar");
+                const toggleBtn = document.getElementById("mobile-sidebar-toggle");
+                
+                if (!sidebar || !toggleBtn) return;
+
+                // Close sidebar if clicking on backdrop or outside
+                if (e.target === this.backdrop || 
+                    (!sidebar.contains(e.target) && 
+                    !toggleBtn.contains(e.target) && 
+                    !e.target.closest(".menu-btn"))) {
+                    this.closeSidebar();
+                }
+            });
+        } catch (error) {
+            console.error("Error setting up click outside handler:", error);
+        }
+    },
+
+    setupResizeHandler() {
+        try {
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    const wasMobile = this.isMobile;
+                    this.checkMobile();
+                    
+                    // Close sidebar when switching from mobile to desktop
+                    if (wasMobile && !this.isMobile && this.sidebarOpen) {
+                        this.closeSidebar();
+                    }
+                }, 150);
+            });
+        } catch (error) {
+            console.error("Error setting up resize handler:", error);
+        }
+    },
+
+    setupKeyboardHandling() {
+        try {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.sidebarOpen) {
+                    this.closeSidebar();
+                }
+            });
+        } catch (error) {
+            console.error("Error setting up keyboard handling:", error);
+        }
+    },
+
+    // Public methods for other modules to use
+    isSidebarOpen() {
+        return this.sidebarOpen;
+    },
+
+    isMobileDevice() {
+        return this.isMobile;
+    },
+
+    // Handle orientation changes
+    handleOrientationChange() {
+        try {
+            setTimeout(() => {
+                this.checkMobile();
+                if (this.sidebarOpen && !this.isMobile) {
+                    this.closeSidebar();
+                }
+            }, 100);
+        } catch (error) {
+            console.error("Error handling orientation change:", error);
+        }
+    }
+};
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => MobileHandler.init());
+} else {
+    MobileHandler.init();
+}
+
+// Handle orientation changes
+window.addEventListener('orientationchange', () => {
+    MobileHandler.handleOrientationChange();
+});
+
+// Export for use in other modules
+window.MobileHandler = MobileHandler;

@@ -193,18 +193,26 @@ try {
 try {
     document.addEventListener("click", e => {
         try {
+            // Remove mobile sidebar handling - now in mobile.js
             if (window.innerWidth <= 768) {
-                const sidebar = document.querySelector(".sidebar");
-                if (sidebar && !sidebar.contains(e.target) && !e.target.closest(".menu-btn")) {
-                    sidebar.classList.remove("open");
-                }
+                // Mobile handling moved to mobile.js
             }
         } catch (error) {
-            console.error("Error in sidebar toggle handler:", error);
+            console.error("Error in click handler:", error);
         }
     });
 } catch (error) {
-    console.error("Error setting up sidebar toggle listener:", error);
+    console.error("Error setting up click listener:", error);
+}
+
+try {
+    // Remove mobile sidebar toggle - now in mobile.js
+    const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
+    if (mobileSidebarToggle) {
+        // Mobile toggle handling moved to mobile.js
+    }
+} catch (error) {
+    console.error("Error setting up mobile sidebar toggle:", error);
 }
 
 try {
