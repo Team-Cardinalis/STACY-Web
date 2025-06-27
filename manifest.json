@@ -1,0 +1,26 @@
+{
+  "name": "STACY",
+  "short_name": "STACY",
+  "description": "Smart Translation And Communication Yield",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2d2d2d",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "thumbnail-small.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "thumbnail-small.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
