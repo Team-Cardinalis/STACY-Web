@@ -100,7 +100,7 @@
 .translate-btn {
     background: var(--accent);
     color: white;
-    border-radius: 100px;
+    border-radius: 5px;
 }
 
 .translate-btn:hover {
