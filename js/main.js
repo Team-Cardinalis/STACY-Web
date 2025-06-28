@@ -50,63 +50,66 @@ const init = async () => {
             STACY.UI.switchToSessionType(initialSessionType);
         }
         
+        // load models
         try {
-            await STACY.Models.loadModels();
+            await Models.loadModels();
         } catch (error) {
             console.error("Model loading failed, using defaults:", error);
         }
         
+        // init model selector
         try {
-            initModelSelector();
+            Models.initModelSelector();
         } catch (error) {
             console.error("Model selector initialization failed:", error);
         }
         
+        // document editor setup
         try {
-            if (typeof STACY.Doc.setupDocumentEditor === 'function') {
-                STACY.Doc.setupDocumentEditor();
+            if (typeof Doc.setupDocumentEditor === 'function') {
+                Doc.setupDocumentEditor();
             }
-            
-            if (typeof updateDocumentPreview === 'function') {
-                updateDocumentPreview();
+            if (typeof Doc.updateDocumentPreview === 'function') {
+                Doc.updateDocumentPreview();
             }
-            if (typeof updateDocumentStats === 'function') {
-                updateDocumentStats();
+            if (typeof Doc.updateDocumentStats === 'function') {
+                Doc.updateDocumentStats();
             }
         } catch (error) {
             console.error("Document editor setup failed:", error);
         }
         
+        // sessions init
         try {
-            if (!sessions.length) {
-                sessions = [{ id: Date.now(), title: "New Session", messages: [], type: "fast" }];
-                save();
+            if (!Sessions.sessions.length) {
+                Sessions.sessions = [{ id: Date.now(), title: "New Session", messages: [], type: "fast" }];
+                Sessions.save();
             }
             let lastIndex = 0;
             try {
                 const storedIndex = localStorage.getItem("currentSessionIndex");
-                if (storedIndex !== null && !isNaN(storedIndex) && sessions[storedIndex]) {
+                if (storedIndex !== null && !isNaN(storedIndex) && Sessions.sessions[storedIndex]) {
                     lastIndex = parseInt(storedIndex, 10);
                 }
             } catch (e) {
-                // Ignore errors
+                // ignore
             }
-            currentSessionIndex = lastIndex;
-            STACY.Sessions.renderSessions();
+            Sessions.currentSessionIndex = lastIndex;
+            Sessions.renderSessions();
             
-            // Ensure UI is in correct state (redundant but safe)
-            if (sessions[currentSessionIndex] && typeof STACY.UI.switchToSessionType === 'function') {
-                STACY.UI.switchToSessionType(sessions[currentSessionIndex].type || 'fast');
+            if (Sessions.sessions[Sessions.currentSessionIndex] && typeof UI.switchToSessionType === 'function') {
+                UI.switchToSessionType(Sessions.sessions[Sessions.currentSessionIndex].type || 'fast');
             }
-            loadSessionData();
+            Sessions.loadSessionData();
         } catch (error) {
             console.error("Session initialization failed:", error);
-            showError(new Error("Failed to initialize sessions"));
+            UI.showError(new Error("Failed to initialize sessions"));
         }
         
+        // welcome modal
         try {
             if (!localStorage.getItem("welcome_shown")) {
-                const modal = $("welcome-modal");
+                const modal = UI.$("welcome-modal");
                 if (modal) {
                     modal.style.display = "flex";
                     localStorage.setItem("welcome_shown", "true");
@@ -117,7 +120,7 @@ const init = async () => {
         }
     } catch (error) {
         console.error("Critical initialization error:", error);
-        showError(new Error("Application failed to initialize"));
+        UI.showError(new Error("Application failed to initialize"));
     }
 };
 
@@ -125,18 +128,19 @@ let inputHandler = null;
 let buttonStateTimeout = null;
 
 try {
-    if (DOM.srcText) {
+    // source‐text listeners
+    if (UI.DOM.srcText) {
         // Remove existing handler if any
         if (inputHandler) {
-            DOM.srcText.removeEventListener("input", inputHandler);
+            UI.DOM.srcText.removeEventListener("input", inputHandler);
         }
         
         inputHandler = () => {
             try {
-                if (DOM.charCount) {
-                    DOM.charCount.textContent = `${DOM.srcText.value.length} characters`;
+                if (UI.DOM.charCount) {
+                    UI.DOM.charCount.textContent = `${UI.DOM.srcText.value.length} characters`;
                 }
-                updateDetectedLanguage();
+                Transl.updateDetectedLanguage();
                 
                 // Clear existing timeout
                 if (buttonStateTimeout) {
@@ -145,20 +149,20 @@ try {
                 
                 buttonStateTimeout = setTimeout(() => {
                     try {
-                        if (DOM.srcSel && DOM.srcSel.value === "AUTO" && DOM.detectedLangEl) {
-                            const isUnsupported = DOM.detectedLangEl.textContent.includes("Unknown");
-                            if (DOM.translateBtn) {
-                                DOM.translateBtn.disabled = isUnsupported && DOM.srcText.value.trim().length > 0;
-                                if (isUnsupported && DOM.srcText.value.trim().length > 0) {
-                                    DOM.translateBtn.textContent = "Unsupported Language";
+                        if (UI.DOM.srcSel && UI.DOM.srcSel.value === "AUTO" && UI.DOM.detectedLangEl) {
+                            const isUnsupported = UI.DOM.detectedLangEl.textContent.includes("Unknown");
+                            if (UI.DOM.translateBtn) {
+                                UI.DOM.translateBtn.disabled = isUnsupported && UI.DOM.srcText.value.trim().length > 0;
+                                if (isUnsupported && UI.DOM.srcText.value.trim().length > 0) {
+                                    UI.DOM.translateBtn.textContent = "Unsupported Language";
                                 } else {
-                                    DOM.translateBtn.textContent = "Translate";
+                                    UI.DOM.translateBtn.textContent = "Translate";
                                 }
                             }
-                        } else if (DOM.translateBtn) {
+                        } else if (UI.DOM.translateBtn) {
                             // Always enable and reset button if not in AUTO mode
-                            DOM.translateBtn.disabled = false;
-                            DOM.translateBtn.textContent = "Translate";
+                            UI.DOM.translateBtn.disabled = false;
+                            UI.DOM.translateBtn.textContent = "Translate";
                         }
                     } catch (error) {
                         console.error("Error updating translate button state:", error);
@@ -167,17 +171,17 @@ try {
                     }
                 }, 600);
                 
-                if (currentSessionIndex !== -1) {
-                    saveSessionData();
+                if (Sessions.currentSessionIndex !== -1) {
+                    Sessions.saveSessionData();
                 }
             } catch (error) {
                 console.error("Error in source text input handler:", error);
             }
         };
         
-        DOM.srcText.addEventListener("input", inputHandler);
+        UI.DOM.srcText.addEventListener("input", inputHandler);
         
-        DOM.srcText.addEventListener("keydown", e => {
+        UI.DOM.srcText.addEventListener("keydown", e => {
             try {
                 if (e.key === "Enter" && e.ctrlKey) {
                     e.preventDefault();
@@ -189,23 +193,24 @@ try {
         });
     }
     // Ajout : mettre à jour la détection de langue lors du changement de la langue source
-    if (DOM.srcSel) {
-        DOM.srcSel.addEventListener("change", () => {
-            updateDetectedLanguage();
+    if (UI.DOM.srcSel) {
+        UI.DOM.srcSel.addEventListener("change", () => {
+            Transl.updateDetectedLanguage();
         });
     }
 } catch (error) {
     console.error("Error setting up source text listeners:", error);
 }
 
+// translate button
 try {
-    if (DOM.translateBtn) {
-        DOM.translateBtn.onclick = () => {
+    if (UI.DOM.translateBtn) {
+        UI.DOM.translateBtn.onclick = () => {
             try {
                 STACY.Transl.processTranslation();
             } catch (error) {
                 console.error("Error in translate button handler:", error);
-                showError(new Error("Translation failed"));
+                UI.showError(new Error("Translation failed"));
             }
         };
     }
@@ -213,18 +218,19 @@ try {
     console.error("Error setting up translate button listener:", error);
 }
 
+// new session button
 try {
-    if (DOM.newSessionBtn) {
-        DOM.newSessionBtn.onclick = () => {
+    if (UI.DOM.newSessionBtn) {
+        UI.DOM.newSessionBtn.onclick = () => {
             try {
-                if (typeof showSessionTypeModal === 'function') {
-                    showSessionTypeModal();
+                if (typeof Sessions.showSessionTypeModal === 'function') {
+                    Sessions.showSessionTypeModal();
                 } else {
-                    addSession();
+                    Sessions.addSession();
                 }
             } catch (error) {
                 console.error("Error in new session handler:", error);
-                showError(new Error("Failed to create new session"));
+                UI.showError(new Error("Failed to create new session"));
             }
         };
     }
@@ -232,25 +238,15 @@ try {
     console.error("Error setting up new session button listener:", error);
 }
 
+// doc translate button
 try {
-    if (DOM.docSourceEditor) {
-    }
-} catch (error) {
-    console.error("Error setting up doc source editor listener:", error);
-}
-
-try {
-    if (DOM.docTranslateBtn) {
-        DOM.docTranslateBtn.onclick = () => {
+    if (UI.DOM.docTranslateBtn) {
+        UI.DOM.docTranslateBtn.onclick = () => {
             try {
-                if (typeof translateDocument === 'function') {
-                    translateDocument();
-                } else {
-                    showError(new Error("Document translation function not available"));
-                }
+                Doc.translateDocument();
             } catch (error) {
                 console.error("Error in doc translate button handler:", error);
-                showError(new Error("Document translation failed"));
+                UI.showError(new Error("Document translation failed"));
             }
         };
     }
@@ -289,7 +285,7 @@ try {
             init();
         } catch (error) {
             console.error("Error during initialization:", error);
-            showError(new Error("Application failed to start"));
+            UI.showError(new Error("Application failed to start"));
         }
     });
 } catch (error) {
