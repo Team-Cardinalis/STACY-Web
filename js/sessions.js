@@ -1,13 +1,13 @@
 "use strict";
 
-const TITLE_MAX = 30;
-const SESSION_TYPES = {
+export const TITLE_MAX = 30;
+export const SESSION_TYPES = {
     FAST: 'fast',
     DOC: 'doc'
 };
 
-let sessions = [];
-let currentSessionIndex = -1;
+export let sessions = [];
+export let currentSessionIndex = -1;
 
 try {
     const stored = localStorage.getItem("sessions");
@@ -24,7 +24,7 @@ try {
     sessions = [];
 }
 
-const save = () => {
+export const save = () => {
     try {
         localStorage.setItem("sessions", JSON.stringify(sessions));
     } catch (error) {
@@ -32,7 +32,7 @@ const save = () => {
     }
 };
 
-const addSession = (title, type = SESSION_TYPES.FAST) => {
+export const addSession = (title, type = SESSION_TYPES.FAST) => {
     try {
         const sessionTitle = (title || "New Session").slice(0, TITLE_MAX);
         const newSession = {
@@ -87,28 +87,37 @@ const showSessionTypeModal = () => {
         const modalBox = modal.querySelector('.modal');
         if (modalBox) modalBox.focus();
 
-        modal.addEventListener('mousedown', (e) => {
+        const mousedownHandler = (e) => {
             if (e.target === modal) {
-                modal.remove();
-            }
-        });
-
-        const escListener = (e) => {
-            if (e.key === "Escape") {
-                modal.remove();
-                document.removeEventListener('keydown', escListener);
+                cleanupModal();
             }
         };
-        document.addEventListener('keydown', escListener);
 
-        modal.addEventListener('remove', () => {
-            document.removeEventListener('keydown', escListener);
-        });
+        const escHandler = (e) => {
+            if (e.key === "Escape") {
+                cleanupModal();
+            }
+        };
+
+        const cleanupModal = () => {
+            try {
+                modal.removeEventListener('mousedown', mousedownHandler);
+                document.removeEventListener('keydown', escHandler);
+                if (modal.parentNode) {
+                    modal.remove();
+                }
+            } catch (error) {
+                console.error("Error cleaning up modal:", error);
+            }
+        };
+
+        modal.addEventListener('mousedown', mousedownHandler);
+        document.addEventListener('keydown', escHandler);
 
         modal.querySelectorAll('.session-type-option').forEach(option => {
             option.onclick = () => {
                 const type = option.dataset.type;
-                modal.remove();
+                cleanupModal();
                 addSession(`New ${type === SESSION_TYPES.DOC ? 'Document' : 'Session'}`, type);
             };
         });
@@ -118,7 +127,7 @@ const showSessionTypeModal = () => {
     }
 };
 
-const deleteSession = index => {
+export const deleteSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             throw new Error("Invalid session index");
@@ -140,7 +149,7 @@ const deleteSession = index => {
     }
 };
 
-const renameSession = index => {
+export const renameSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             throw new Error("Invalid session index");
@@ -188,7 +197,7 @@ const renameSession = index => {
     }
 };
 
-const renderSessions = () => {
+export const renderSessions = () => {
     try {
         if (!DOM.sessionsEl) {
             return;
@@ -239,7 +248,7 @@ const renderSessions = () => {
     }
 };
 
-const setCurrentSession = index => {
+export const setCurrentSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             return;
@@ -263,7 +272,7 @@ const setCurrentSession = index => {
     }
 };
 
-const loadSessionData = () => {
+export const loadSessionData = () => {
     try {
         const session = sessions[currentSessionIndex];
         if (!session) return;
@@ -314,7 +323,7 @@ const loadSessionData = () => {
     }
 };
 
-const saveSessionData = () => {
+export const saveSessionData = () => {
     try {
         if (currentSessionIndex === -1 || !sessions[currentSessionIndex]) return;
         

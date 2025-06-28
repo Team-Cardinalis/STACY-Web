@@ -19,6 +19,35 @@ body {
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
+    /* Improve mobile touch interactions */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Prevent text selection on interactive elements */
+button, 
+.floating-btn, 
+.copy-btn, 
+.translate-btn,
+.mobile-sidebar-toggle {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    outline: none;
+}
+
+button:focus,
+.floating-btn:focus,
+.copy-btn:focus,
+.translate-btn:focus,
+.mobile-sidebar-toggle:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 ::-webkit-scrollbar {

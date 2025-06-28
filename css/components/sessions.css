@@ -1,0 +1,83 @@
+.session-type-badge {
+    font-size: 14px;
+    margin-right: 8px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.session-type-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.session-type-option {
+    padding: 20px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    background: var(--surface);
+}
+
+.session-type-option:hover {
+    border-color: var(--accent);
+    background: var(--surface-hover);
+}
+
+.session-type-icon {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: color var(--transition);
+}
+
+.session-type-option:hover .session-type-icon {
+    color: var(--item-active);
+}
+
+.session-type-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.session-type-description {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.session-icon {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.session-item.active .session-icon {
+    color: var(--item-active);
+    opacity: 1;
+}
+
+.session-title-input {
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px 8px;
+    outline: none;
+    transition: var(--transition);
+}
+
+.session-title-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}

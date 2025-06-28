@@ -92,15 +92,22 @@
     align-items: center;
     gap: 8px;
     letter-spacing: 0.5px;
+    /* Prevent blue selection highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    outline: none;
 }
 
 .translate-btn:hover {
     background: var(--accent-hover);
 }
 
-.translate-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.translate-btn:active,
+.translate-btn:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .modal-btn {
@@ -134,6 +141,16 @@
     align-items: center;
     gap: 8px;
     letter-spacing: 0.5px;
+    /* Prevent blue selection highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    touch-action: manipulation;
 }
 
 .copy-btn:hover,
@@ -142,10 +159,16 @@
     color: var(--text-primary);
 }
 
-.copy-btn:disabled,
-.export-pdf-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.copy-btn:active,
+.export-pdf-btn:active {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.copy-btn:focus,
+.export-pdf-btn:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .new-session-btn {

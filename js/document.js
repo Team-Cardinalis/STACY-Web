@@ -1,5 +1,8 @@
 "use strict";
 
+import { DOM } from './ui.js';
+import { detectLang, translate } from './api.js';
+
 const MAX_PARAGRAPH_LENGTH = 1000;
 
 const splitIntoTranslatableParagraphs = (text) => {
@@ -38,7 +41,7 @@ const splitIntoTranslatableParagraphs = (text) => {
     }
 };
 
-const updateDocumentStats = () => {
+export const updateDocumentStats = () => {
     try {
         const text = DOM.docSourceText?.value || "";
         const charCount = text.length;
@@ -69,11 +72,22 @@ const syncEditorToTextarea = () => {
     }
 };
 
-const setupDocumentEditor = () => {
+let editorInputHandler = null;
+let editorPasteHandler = null;
+
+export const setupDocumentEditor = () => {
     try {
         if (!DOM.docSourceEditor || !DOM.docSourceText) return;
         
-        DOM.docSourceEditor.addEventListener('input', () => {
+        // Remove existing handlers
+        if (editorInputHandler) {
+            DOM.docSourceEditor.removeEventListener('input', editorInputHandler);
+        }
+        if (editorPasteHandler) {
+            DOM.docSourceEditor.removeEventListener('paste', editorPasteHandler);
+        }
+        
+        editorInputHandler = () => {
             try {
                 syncEditorToTextarea();
                 if (currentSessionIndex !== -1) {
@@ -82,9 +96,9 @@ const setupDocumentEditor = () => {
             } catch (error) {
                 console.error("Error in document editor input handler:", error);
             }
-        });
+        };
         
-        DOM.docSourceEditor.addEventListener('paste', (e) => {
+        editorPasteHandler = (e) => {
             try {
                 e.preventDefault();
                 const text = (e.clipboardData || window.clipboardData).getData('text');
@@ -92,7 +106,10 @@ const setupDocumentEditor = () => {
             } catch (error) {
                 console.error("Error handling paste:", error);
             }
-        });
+        };
+        
+        DOM.docSourceEditor.addEventListener('input', editorInputHandler);
+        DOM.docSourceEditor.addEventListener('paste', editorPasteHandler);
         
         const setupToolbarButton = (buttonId, command, value = null) => {
             try {
@@ -164,7 +181,7 @@ const showDocumentProgress = (current, total, currentParagraph = "") => {
     }
 };
 
-const translateDocument = async () => {
+export const translateDocument = async () => {
     try {
         if (!DOM.docSourceEditor || !DOM.docTranslateBtn) {
             console.error("Required DOM elements not found for document translation");
@@ -252,7 +269,7 @@ const translateDocument = async () => {
     }
 };
 
-const updateDocumentPreview = () => {
+export const updateDocumentPreview = () => {
     try {
         const currentSession = sessions[currentSessionIndex];
         if (!currentSession || !DOM.docPreview) return;
@@ -279,7 +296,7 @@ const updateDocumentPreview = () => {
     }
 };
 
-const exportDocumentToPDF = () => {
+export const exportDocumentToPDF = () => {
     try {
         const currentSession = sessions[currentSessionIndex];
         if (!currentSession || currentSession.type !== 'doc') {

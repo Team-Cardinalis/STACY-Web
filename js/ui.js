@@ -1,6 +1,6 @@
 "use strict";
 
-const $ = id => {
+export const $ = id => {
     try {
         const element = document.getElementById(id);
         if (!element) {
@@ -13,7 +13,7 @@ const $ = id => {
     }
 };
 
-const DOM = {
+export const DOM = {
     get sessionsEl() { return $("sessions"); },
     get srcText() { return $("source-text"); },
     get tgtText() { return $("target-text"); },
@@ -38,7 +38,7 @@ const DOM = {
     get docParagraphCount() { return $("doc-paragraph-count"); }
 };
 
-const showError = err => {
+export const showError = err => {
     try {
         const toast = document.createElement("div");
         toast.textContent = err.message || "An error occurred";
@@ -59,7 +59,7 @@ const showError = err => {
     }
 };
 
-const closeWelcomeModal = () => {
+export const closeWelcomeModal = () => {
     try {
         const modal = $("welcome-modal");
         if (modal) {
@@ -70,7 +70,9 @@ const closeWelcomeModal = () => {
     }
 };
 
-const showSessionMenu = (sessionDiv, index) => {
+let menuCleanupTimeout;
+
+export const showSessionMenu = (sessionDiv, index) => {
     try {
         if (!sessionDiv || typeof index !== 'number') {
             console.error("Invalid parameters for session menu");
@@ -122,9 +124,14 @@ const showSessionMenu = (sessionDiv, index) => {
         menu.appendChild(deleteItem);
         document.body.appendChild(menu);
         
-        setTimeout(() => {
+        // Clear any existing timeout
+        if (menuCleanupTimeout) {
+            clearTimeout(menuCleanupTimeout);
+        }
+        
+        menuCleanupTimeout = setTimeout(() => {
             try {
-                document.addEventListener('click', () => {
+                const clickHandler = () => {
                     try {
                         if (menu.parentNode) {
                             menu.remove();
@@ -132,7 +139,9 @@ const showSessionMenu = (sessionDiv, index) => {
                     } catch (error) {
                         console.error("Error removing menu on click:", error);
                     }
-                }, { once: true });
+                    document.removeEventListener('click', clickHandler);
+                };
+                document.addEventListener('click', clickHandler, { once: true });
             } catch (error) {
                 console.error("Error setting up menu close listener:", error);
             }
@@ -143,7 +152,7 @@ const showSessionMenu = (sessionDiv, index) => {
     }
 };
 
-const switchToSessionType = (sessionType) => {
+export const switchToSessionType = sessionType => {
     try {
         const translationContainer = DOM.translationContainer;
         const docContainer = DOM.docContainer;
@@ -283,8 +292,3 @@ window.exportToPDF = () => {
         showError(new Error("Failed to export PDF"));
     }
 };
-
-window.closeWelcomeModal = closeWelcomeModal;
-window.switchToSessionType = switchToSessionType;
-window.closeWelcomeModal = closeWelcomeModal;
-window.switchToSessionType = switchToSessionType;

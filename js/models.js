@@ -1,6 +1,10 @@
 "use strict";
 
-const initModelSelector = () => {
+import { $ } from './ui.js';
+
+let globalClickHandler = null;
+
+export const initModelSelector = () => {
     try {
         const button = $("model-selector-button");
         const dropdown = $("model-selector-dropdown");
@@ -34,14 +38,21 @@ const initModelSelector = () => {
             }
         };
         
-        document.addEventListener('click', () => {
+        // Remove existing global click handler before adding new one
+        if (globalClickHandler) {
+            document.removeEventListener('click', globalClickHandler);
+        }
+        
+        globalClickHandler = () => {
             try {
                 dropdown.classList.remove("open");
                 button.classList.remove("open");
             } catch (error) {
                 console.error("Error closing model selector:", error);
             }
-        });
+        };
+        
+        document.addEventListener('click', globalClickHandler);
         
         dropdown.addEventListener('click', (e) => {
             try {
@@ -76,7 +87,7 @@ const initModelSelector = () => {
     }
 };
 
-const loadModels = async () => {
+export const loadModels = async () => {
     try {
         const models = await fetchModels();
         const dropdown = $("model-selector-dropdown");

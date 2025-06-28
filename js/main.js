@@ -1,5 +1,31 @@
 "use strict";
 
+// Imports
+import * as API       from './api.js';
+import * as Icons     from './icons.js';
+import * as UI        from './ui.js';
+import * as Sessions  from './sessions.js';
+import * as Transl    from './translation.js';
+import * as Doc       from './document.js';
+import * as Models    from './models.js';
+import { MobileHandler } from './mobile.js';
+import { initVersion }   from './version.js';
+
+// Build global namespace
+export const STACY = {
+    API,
+    Icons,
+    UI,
+    Sessions,
+    Transl,
+    Doc,
+    Models,
+    Mobile: MobileHandler,
+    initVersion
+};
+window.STACY = STACY;
+
+// Application init
 const init = async () => {
     try {
         // Determine the session type early to prevent visual jump
@@ -20,12 +46,12 @@ const init = async () => {
         }
         
         // Set initial UI state immediately
-        if (typeof switchToSessionType === 'function') {
-            switchToSessionType(initialSessionType);
+        if (typeof STACY.UI.switchToSessionType === 'function') {
+            STACY.UI.switchToSessionType(initialSessionType);
         }
         
         try {
-            await loadModels();
+            await STACY.Models.loadModels();
         } catch (error) {
             console.error("Model loading failed, using defaults:", error);
         }
@@ -37,8 +63,8 @@ const init = async () => {
         }
         
         try {
-            if (typeof setupDocumentEditor === 'function') {
-                setupDocumentEditor();
+            if (typeof STACY.Doc.setupDocumentEditor === 'function') {
+                STACY.Doc.setupDocumentEditor();
             }
             
             if (typeof updateDocumentPreview === 'function') {
@@ -66,11 +92,11 @@ const init = async () => {
                 // Ignore errors
             }
             currentSessionIndex = lastIndex;
-            renderSessions();
+            STACY.Sessions.renderSessions();
             
             // Ensure UI is in correct state (redundant but safe)
-            if (sessions[currentSessionIndex] && typeof switchToSessionType === 'function') {
-                switchToSessionType(sessions[currentSessionIndex].type || 'fast');
+            if (sessions[currentSessionIndex] && typeof STACY.UI.switchToSessionType === 'function') {
+                STACY.UI.switchToSessionType(sessions[currentSessionIndex].type || 'fast');
             }
             loadSessionData();
         } catch (error) {
@@ -95,16 +121,29 @@ const init = async () => {
     }
 };
 
+let inputHandler = null;
+let buttonStateTimeout = null;
+
 try {
     if (DOM.srcText) {
-        DOM.srcText.addEventListener("input", () => {
+        // Remove existing handler if any
+        if (inputHandler) {
+            DOM.srcText.removeEventListener("input", inputHandler);
+        }
+        
+        inputHandler = () => {
             try {
                 if (DOM.charCount) {
                     DOM.charCount.textContent = `${DOM.srcText.value.length} characters`;
                 }
                 updateDetectedLanguage();
                 
-                setTimeout(() => {
+                // Clear existing timeout
+                if (buttonStateTimeout) {
+                    clearTimeout(buttonStateTimeout);
+                }
+                
+                buttonStateTimeout = setTimeout(() => {
                     try {
                         if (DOM.srcSel && DOM.srcSel.value === "AUTO" && DOM.detectedLangEl) {
                             const isUnsupported = DOM.detectedLangEl.textContent.includes("Unknown");
@@ -123,6 +162,8 @@ try {
                         }
                     } catch (error) {
                         console.error("Error updating translate button state:", error);
+                    } finally {
+                        buttonStateTimeout = null;
                     }
                 }, 600);
                 
@@ -132,13 +173,15 @@ try {
             } catch (error) {
                 console.error("Error in source text input handler:", error);
             }
-        });
+        };
+        
+        DOM.srcText.addEventListener("input", inputHandler);
         
         DOM.srcText.addEventListener("keydown", e => {
             try {
                 if (e.key === "Enter" && e.ctrlKey) {
                     e.preventDefault();
-                    processTranslation();
+                    STACY.Transl.processTranslation();
                 }
             } catch (error) {
                 console.error("Error in keydown handler:", error);
@@ -159,7 +202,7 @@ try {
     if (DOM.translateBtn) {
         DOM.translateBtn.onclick = () => {
             try {
-                processTranslation();
+                STACY.Transl.processTranslation();
             } catch (error) {
                 console.error("Error in translate button handler:", error);
                 showError(new Error("Translation failed"));
@@ -271,17 +314,3 @@ try {
 } catch (error) {
     console.error("Error setting up global error handlers:", error);
 }
-    window.addEventListener("error", e => {
-        console.error("Unhandled error:", e.error || e.message || "Unknown error");
-        if (typeof showError === 'function') {
-            showError(e.error || new Error("An unexpected error occurred"));
-        }
-    });
-    
-    window.addEventListener("unhandledrejection", e => {
-        console.error("Unhandled promise rejection:", e.reason);
-        if (typeof showError === 'function') {
-            showError(new Error("An unexpected error occurred"));
-        }
-        e.preventDefault();
-    });

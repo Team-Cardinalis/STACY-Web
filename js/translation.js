@@ -1,6 +1,9 @@
 "use strict";
 
-const LANG_MAP = { fr: "French", en: "English", ru: "Russian", it: "Italian", ja: "Japanese", es: "Spanish", de: "German", ar: "Arabic" };
+import { DOM } from './ui.js';
+import { detectLang } from './api.js';
+
+export const LANG_MAP = { fr: "French", en: "English", ru: "Russian", it: "Italian", ja: "Japanese", es: "Spanish", de: "German", ar: "Arabic" };
 
 let detectTimeout;
 
@@ -8,7 +11,7 @@ const isSupportedLanguage = (langCode) => {
     return LANG_MAP.hasOwnProperty(langCode);
 };
 
-const updateDetectedLanguage = () => {
+export const updateDetectedLanguage = () => {
     try {
         if (!DOM.srcSel || !DOM.detectedLangEl || !DOM.srcText) {
             console.error("Required DOM elements not found for language detection");
@@ -26,7 +29,12 @@ const updateDetectedLanguage = () => {
         }
 
         const text = DOM.srcText.value?.trim() || "";
-        clearTimeout(detectTimeout);
+        
+        // Always clear previous timeout before setting new one
+        if (detectTimeout) {
+            clearTimeout(detectTimeout);
+            detectTimeout = null;
+        }
 
         if (text.length < 3) {
             DOM.detectedLangEl.textContent = "";
@@ -55,6 +63,8 @@ const updateDetectedLanguage = () => {
                 DOM.detectedLangEl.textContent = "Detection error";
                 DOM.detectedLangEl.style.color = "var(--error)";
                 DOM.detectedLangEl.style.display = ""; // Ensure visible
+            } finally {
+                detectTimeout = null;
             }
         }, 500);
     } catch (error) {
@@ -80,7 +90,7 @@ const adjustLanguage = (src, tgt) => {
     }
 };
 
-const processTranslation = async () => {
+export const processTranslation = async () => {
     try {
         if (!DOM.srcText || !DOM.translateBtn) {
             console.error("Required DOM elements not found for translation");

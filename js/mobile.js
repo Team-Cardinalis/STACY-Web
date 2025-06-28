@@ -1,11 +1,12 @@
 "use strict";
 
-const MobileHandler = {
+export const MobileHandler = {
     isMobile: false,
     sidebarOpen: false,
     touchStartX: 0,
     touchStartY: 0,
     backdrop: null,
+    backdropClickHandler: null,
     
     init() {
         this.checkMobile();
@@ -30,10 +31,17 @@ const MobileHandler = {
             this.backdrop.className = 'sidebar-backdrop';
             document.body.appendChild(this.backdrop);
             
+            // Remove existing handler if any
+            if (this.backdropClickHandler) {
+                this.backdrop.removeEventListener('click', this.backdropClickHandler);
+            }
+            
             // Add click handler to backdrop
-            this.backdrop.addEventListener('click', () => {
+            this.backdropClickHandler = () => {
                 this.closeSidebar();
-            });
+            };
+            
+            this.backdrop.addEventListener('click', this.backdropClickHandler);
         } catch (error) {
             console.error("Error creating backdrop:", error);
         }
@@ -63,12 +71,26 @@ const MobileHandler = {
             if (!sidebar || !mainContent) return;
 
             this.sidebarOpen = !this.sidebarOpen;
-            sidebar.classList.toggle("open", this.sidebarOpen);
             
-            // Toggle backdrop and blur
-            if (this.backdrop) {
-                this.backdrop.classList.toggle("active", this.sidebarOpen);
+            // Force a reflow to ensure the animation triggers
+            if (this.sidebarOpen) {
+                sidebar.style.display = 'flex';
+                // Force reflow
+                sidebar.offsetHeight;
+                sidebar.classList.add("open");
+            } else {
+                sidebar.classList.remove("open");
             }
+            
+            // Toggle backdrop and blur with slight delay for smooth animation
+            if (this.backdrop) {
+                if (this.sidebarOpen) {
+                    this.backdrop.classList.add("active");
+                } else {
+                    this.backdrop.classList.remove("active");
+                }
+            }
+            
             mainContent.classList.toggle("blurred", this.sidebarOpen);
             
             // Hide/show floating buttons
@@ -118,6 +140,13 @@ const MobileHandler = {
             if (toggleBtn) {
                 toggleBtn.classList.remove("active");
             }
+            
+            // Hide sidebar after animation completes
+            setTimeout(() => {
+                if (!this.sidebarOpen) {
+                    sidebar.style.display = '';
+                }
+            }, 400); // Match animation duration
         } catch (error) {
             console.error("Error closing sidebar:", error);
         }

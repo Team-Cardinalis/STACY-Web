@@ -6,14 +6,16 @@
         height: 100vh;
         max-height: 100vh;
         z-index: 1000;
-        transition: left 0.3s ease;
+        transition: left var(--mobile-sidebar-duration) var(--animation-timing), 
+                   transform var(--mobile-sidebar-duration) var(--animation-timing);
+        transform: translateX(0);
     }
     
     .sidebar.open {
         left: 0;
+        transform: translateX(0);
     }
     
-    /* Add backdrop blur when sidebar is open */
     .sidebar-backdrop {
         position: fixed;
         top: 0;
@@ -26,7 +28,8 @@
         z-index: 999;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition: opacity var(--mobile-sidebar-duration) var(--animation-timing), 
+                   visibility var(--mobile-sidebar-duration) var(--animation-timing);
     }
     
     .sidebar-backdrop.active {
@@ -39,7 +42,7 @@
         height: 100vh;
         max-height: 100vh;
         overflow: hidden;
-        transition: filter 0.3s ease;
+        transition: filter var(--mobile-sidebar-duration) var(--animation-timing);
     }
     
     .main-content.blurred {
@@ -54,7 +57,7 @@
         height: 100%;
         max-height: 100%;
         overflow: hidden;
-        transition: opacity 0.15s ease-in-out;
+        transition: opacity var(--transition-fast);
     }
     
     .translation-container.initialized {
@@ -73,6 +76,7 @@
     }
     
     .section-header {
+        border-top: 1px solid var(--border);
         padding: 12px 16px;
         min-height: 56px;
         flex-shrink: 0;
@@ -146,7 +150,8 @@
         justify-content: center;
         z-index: 999;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        transition: var(--transition), transform 0.3s ease;
+        transition: var(--mobile-transition), 
+                   transform var(--mobile-transition);
     }
     
     .mobile-sidebar-toggle.active {
@@ -190,9 +195,20 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        transition: var(--transition), transform 0.3s ease;
+        transition: var(--transition), transform var(--transition-slow);
         font-size: 16px;
         position: relative;
+        /* Prevent blue selection highlight on mobile */
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        outline: none;
+        /* Improve touch interaction */
+        touch-action: manipulation;
     }
     
     .floating-btn:hover {
@@ -202,6 +218,14 @@
     
     .floating-btn:active {
         transform: scale(0.95);
+        /* Override any default active styles */
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .floating-btn:focus {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
     }
     
     .floating-btn.copy-fab {
@@ -229,7 +253,7 @@
     }
     
     .floating-btn.success {
-        background: var(--success, #059669);
+        background: var(--accent-hover);
     }
     
     /* Hide floating buttons when sidebar is open */
@@ -271,7 +295,7 @@
         height: 100%;
         max-height: 100%;
         overflow: hidden;
-        transition: opacity 0.15s ease-in-out;
+        transition: opacity var(--transition-fast);
     }
     
     .doc-container.initialized {
@@ -282,7 +306,6 @@
         flex: 1;
         min-height: 0;
         border-left: none;
-        border-bottom: 1px solid var(--border);
     }
     
     .doc-section:last-child {

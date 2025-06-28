@@ -1,4 +1,6 @@
-(async function() {
+"use strict";
+
+export async function initVersion() {
     const el = document.getElementById("sidebar-version");
     if (el) el.textContent = "loading...";
     try {
@@ -87,4 +89,4 @@
             }
         }
     }
-})();
+};
