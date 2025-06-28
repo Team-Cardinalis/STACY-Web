@@ -1,6 +1,6 @@
 "use strict";
 
-export const $ = id => {
+const $ = id => {
     try {
         const element = document.getElementById(id);
         if (!element) {
@@ -13,7 +13,7 @@ export const $ = id => {
     }
 };
 
-export const DOM = {
+const DOM = {
     get sessionsEl() { return $("sessions"); },
     get srcText() { return $("source-text"); },
     get tgtText() { return $("target-text"); },
@@ -38,7 +38,7 @@ export const DOM = {
     get docParagraphCount() { return $("doc-paragraph-count"); }
 };
 
-export const showError = err => {
+const showError = err => {
     try {
         const toast = document.createElement("div");
         toast.textContent = err.message || "An error occurred";
@@ -59,7 +59,7 @@ export const showError = err => {
     }
 };
 
-export const closeWelcomeModal = () => {
+const closeWelcomeModal = () => {
     try {
         const modal = $("welcome-modal");
         if (modal) {
@@ -72,7 +72,7 @@ export const closeWelcomeModal = () => {
 
 let menuCleanupTimeout;
 
-export const showSessionMenu = (sessionDiv, index) => {
+const showSessionMenu = (sessionDiv, index) => {
     try {
         if (!sessionDiv || typeof index !== 'number') {
             console.error("Invalid parameters for session menu");
@@ -152,7 +152,7 @@ export const showSessionMenu = (sessionDiv, index) => {
     }
 };
 
-export const switchToSessionType = sessionType => {
+const switchToSessionType = (sessionType) => {
     try {
         const translationContainer = DOM.translationContainer;
         const docContainer = DOM.docContainer;
@@ -292,3 +292,8 @@ window.exportToPDF = () => {
         showError(new Error("Failed to export PDF"));
     }
 };
+
+window.closeWelcomeModal = closeWelcomeModal;
+window.switchToSessionType = switchToSessionType;
+window.closeWelcomeModal = closeWelcomeModal;
+window.switchToSessionType = switchToSessionType;

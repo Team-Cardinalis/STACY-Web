@@ -1,6 +1,6 @@
 "use strict";
 
-export const MobileHandler = {
+const MobileHandler = {
     isMobile: false,
     sidebarOpen: false,
     touchStartX: 0,

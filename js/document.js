@@ -1,8 +1,5 @@
 "use strict";
 
-import { DOM } from './ui.js';
-import { detectLang, translate } from './api.js';
-
 const MAX_PARAGRAPH_LENGTH = 1000;
 
 const splitIntoTranslatableParagraphs = (text) => {
@@ -41,7 +38,7 @@ const splitIntoTranslatableParagraphs = (text) => {
     }
 };
 
-export const updateDocumentStats = () => {
+const updateDocumentStats = () => {
     try {
         const text = DOM.docSourceText?.value || "";
         const charCount = text.length;
@@ -75,7 +72,7 @@ const syncEditorToTextarea = () => {
 let editorInputHandler = null;
 let editorPasteHandler = null;
 
-export const setupDocumentEditor = () => {
+const setupDocumentEditor = () => {
     try {
         if (!DOM.docSourceEditor || !DOM.docSourceText) return;
         
@@ -181,7 +178,7 @@ const showDocumentProgress = (current, total, currentParagraph = "") => {
     }
 };
 
-export const translateDocument = async () => {
+const translateDocument = async () => {
     try {
         if (!DOM.docSourceEditor || !DOM.docTranslateBtn) {
             console.error("Required DOM elements not found for document translation");
@@ -269,7 +266,7 @@ export const translateDocument = async () => {
     }
 };
 
-export const updateDocumentPreview = () => {
+const updateDocumentPreview = () => {
     try {
         const currentSession = sessions[currentSessionIndex];
         if (!currentSession || !DOM.docPreview) return;
@@ -296,7 +293,7 @@ export const updateDocumentPreview = () => {
     }
 };
 
-export const exportDocumentToPDF = () => {
+const exportDocumentToPDF = () => {
     try {
         const currentSession = sessions[currentSessionIndex];
         if (!currentSession || currentSession.type !== 'doc') {

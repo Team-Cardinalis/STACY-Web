@@ -1,9 +1,6 @@
 "use strict";
 
-import { DOM } from './ui.js';
-import { detectLang } from './api.js';
-
-export const LANG_MAP = { fr: "French", en: "English", ru: "Russian", it: "Italian", ja: "Japanese", es: "Spanish", de: "German", ar: "Arabic" };
+const LANG_MAP = { fr: "French", en: "English", ru: "Russian", it: "Italian", ja: "Japanese", es: "Spanish", de: "German", ar: "Arabic" };
 
 let detectTimeout;
 
@@ -11,7 +8,7 @@ const isSupportedLanguage = (langCode) => {
     return LANG_MAP.hasOwnProperty(langCode);
 };
 
-export const updateDetectedLanguage = () => {
+const updateDetectedLanguage = () => {
     try {
         if (!DOM.srcSel || !DOM.detectedLangEl || !DOM.srcText) {
             console.error("Required DOM elements not found for language detection");
@@ -90,7 +87,7 @@ const adjustLanguage = (src, tgt) => {
     }
 };
 
-export const processTranslation = async () => {
+const processTranslation = async () => {
     try {
         if (!DOM.srcText || !DOM.translateBtn) {
             console.error("Required DOM elements not found for translation");

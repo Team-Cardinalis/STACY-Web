@@ -1,10 +1,8 @@
 "use strict";
 
-import { $ } from './ui.js';
-
 let globalClickHandler = null;
 
-export const initModelSelector = () => {
+const initModelSelector = () => {
     try {
         const button = $("model-selector-button");
         const dropdown = $("model-selector-dropdown");
@@ -87,7 +85,7 @@ export const initModelSelector = () => {
     }
 };
 
-export const loadModels = async () => {
+const loadModels = async () => {
     try {
         const models = await fetchModels();
         const dropdown = $("model-selector-dropdown");

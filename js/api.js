@@ -6,7 +6,7 @@ const API_URLS = {
     models: "https://translate.teamcardinalis.com/models"
 };
 
-export const detectLang = async txt => {
+const detectLang = async txt => {
     try {
         if (!txt || typeof txt !== 'string' || txt.trim().length < 3) {
             throw new Error("Text too short for detection");
@@ -32,7 +32,7 @@ export const detectLang = async txt => {
     }
 };
 
-export const translate = async (txt, src, tgt) => {
+const translate = async (txt, src, tgt) => {
     try {
         if (!txt || typeof txt !== 'string' || txt.trim().length === 0) {
             throw new Error("No text to translate");
@@ -66,7 +66,7 @@ export const translate = async (txt, src, tgt) => {
     }
 };
 
-export const fetchModels = async () => {
+const fetchModels = async () => {
     try {
         const response = await fetch(API_URLS.models, { timeout: 10000 });
         

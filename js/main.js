@@ -1,31 +1,5 @@
 "use strict";
 
-// Imports
-import * as API       from './api.js';
-import * as Icons     from './icons.js';
-import * as UI        from './ui.js';
-import * as Sessions  from './sessions.js';
-import * as Transl    from './translation.js';
-import * as Doc       from './document.js';
-import * as Models    from './models.js';
-import { MobileHandler } from './mobile.js';
-import { initVersion }   from './version.js';
-
-// Build global namespace
-export const STACY = {
-    API,
-    Icons,
-    UI,
-    Sessions,
-    Transl,
-    Doc,
-    Models,
-    Mobile: MobileHandler,
-    initVersion
-};
-window.STACY = STACY;
-
-// Application init
 const init = async () => {
     try {
         // Determine the session type early to prevent visual jump
@@ -46,70 +20,67 @@ const init = async () => {
         }
         
         // Set initial UI state immediately
-        if (typeof STACY.UI.switchToSessionType === 'function') {
-            STACY.UI.switchToSessionType(initialSessionType);
+        if (typeof switchToSessionType === 'function') {
+            switchToSessionType(initialSessionType);
         }
         
-        // load models
         try {
-            await Models.loadModels();
+            await loadModels();
         } catch (error) {
             console.error("Model loading failed, using defaults:", error);
         }
         
-        // init model selector
         try {
-            Models.initModelSelector();
+            initModelSelector();
         } catch (error) {
             console.error("Model selector initialization failed:", error);
         }
         
-        // document editor setup
         try {
-            if (typeof Doc.setupDocumentEditor === 'function') {
-                Doc.setupDocumentEditor();
+            if (typeof setupDocumentEditor === 'function') {
+                setupDocumentEditor();
             }
-            if (typeof Doc.updateDocumentPreview === 'function') {
-                Doc.updateDocumentPreview();
+            
+            if (typeof updateDocumentPreview === 'function') {
+                updateDocumentPreview();
             }
-            if (typeof Doc.updateDocumentStats === 'function') {
-                Doc.updateDocumentStats();
+            if (typeof updateDocumentStats === 'function') {
+                updateDocumentStats();
             }
         } catch (error) {
             console.error("Document editor setup failed:", error);
         }
         
-        // sessions init
         try {
-            if (!Sessions.sessions.length) {
-                Sessions.sessions = [{ id: Date.now(), title: "New Session", messages: [], type: "fast" }];
-                Sessions.save();
+            if (!sessions.length) {
+                sessions = [{ id: Date.now(), title: "New Session", messages: [], type: "fast" }];
+                save();
             }
             let lastIndex = 0;
             try {
                 const storedIndex = localStorage.getItem("currentSessionIndex");
-                if (storedIndex !== null && !isNaN(storedIndex) && Sessions.sessions[storedIndex]) {
+                if (storedIndex !== null && !isNaN(storedIndex) && sessions[storedIndex]) {
                     lastIndex = parseInt(storedIndex, 10);
                 }
             } catch (e) {
-                // ignore
+                // Ignore errors
             }
-            Sessions.currentSessionIndex = lastIndex;
-            Sessions.renderSessions();
+            currentSessionIndex = lastIndex;
+            renderSessions();
             
-            if (Sessions.sessions[Sessions.currentSessionIndex] && typeof UI.switchToSessionType === 'function') {
-                UI.switchToSessionType(Sessions.sessions[Sessions.currentSessionIndex].type || 'fast');
+            // Ensure UI is in correct state (redundant but safe)
+            if (sessions[currentSessionIndex] && typeof switchToSessionType === 'function') {
+                switchToSessionType(sessions[currentSessionIndex].type || 'fast');
             }
-            Sessions.loadSessionData();
+            loadSessionData();
         } catch (error) {
             console.error("Session initialization failed:", error);
-            UI.showError(new Error("Failed to initialize sessions"));
+            showError(new Error("Failed to initialize sessions"));
         }
         
-        // welcome modal
         try {
             if (!localStorage.getItem("welcome_shown")) {
-                const modal = UI.$("welcome-modal");
+                const modal = $("welcome-modal");
                 if (modal) {
                     modal.style.display = "flex";
                     localStorage.setItem("welcome_shown", "true");
@@ -120,7 +91,7 @@ const init = async () => {
         }
     } catch (error) {
         console.error("Critical initialization error:", error);
-        UI.showError(new Error("Application failed to initialize"));
+        showError(new Error("Application failed to initialize"));
     }
 };
 
@@ -128,19 +99,18 @@ let inputHandler = null;
 let buttonStateTimeout = null;
 
 try {
-    // source‐text listeners
-    if (UI.DOM.srcText) {
+    if (DOM.srcText) {
         // Remove existing handler if any
         if (inputHandler) {
-            UI.DOM.srcText.removeEventListener("input", inputHandler);
+            DOM.srcText.removeEventListener("input", inputHandler);
         }
         
         inputHandler = () => {
             try {
-                if (UI.DOM.charCount) {
-                    UI.DOM.charCount.textContent = `${UI.DOM.srcText.value.length} characters`;
+                if (DOM.charCount) {
+                    DOM.charCount.textContent = `${DOM.srcText.value.length} characters`;
                 }
-                Transl.updateDetectedLanguage();
+                updateDetectedLanguage();
                 
                 // Clear existing timeout
                 if (buttonStateTimeout) {
@@ -149,20 +119,20 @@ try {
                 
                 buttonStateTimeout = setTimeout(() => {
                     try {
-                        if (UI.DOM.srcSel && UI.DOM.srcSel.value === "AUTO" && UI.DOM.detectedLangEl) {
-                            const isUnsupported = UI.DOM.detectedLangEl.textContent.includes("Unknown");
-                            if (UI.DOM.translateBtn) {
-                                UI.DOM.translateBtn.disabled = isUnsupported && UI.DOM.srcText.value.trim().length > 0;
-                                if (isUnsupported && UI.DOM.srcText.value.trim().length > 0) {
-                                    UI.DOM.translateBtn.textContent = "Unsupported Language";
+                        if (DOM.srcSel && DOM.srcSel.value === "AUTO" && DOM.detectedLangEl) {
+                            const isUnsupported = DOM.detectedLangEl.textContent.includes("Unknown");
+                            if (DOM.translateBtn) {
+                                DOM.translateBtn.disabled = isUnsupported && DOM.srcText.value.trim().length > 0;
+                                if (isUnsupported && DOM.srcText.value.trim().length > 0) {
+                                    DOM.translateBtn.textContent = "Unsupported Language";
                                 } else {
-                                    UI.DOM.translateBtn.textContent = "Translate";
+                                    DOM.translateBtn.textContent = "Translate";
                                 }
                             }
-                        } else if (UI.DOM.translateBtn) {
+                        } else if (DOM.translateBtn) {
                             // Always enable and reset button if not in AUTO mode
-                            UI.DOM.translateBtn.disabled = false;
-                            UI.DOM.translateBtn.textContent = "Translate";
+                            DOM.translateBtn.disabled = false;
+                            DOM.translateBtn.textContent = "Translate";
                         }
                     } catch (error) {
                         console.error("Error updating translate button state:", error);
@@ -171,21 +141,21 @@ try {
                     }
                 }, 600);
                 
-                if (Sessions.currentSessionIndex !== -1) {
-                    Sessions.saveSessionData();
+                if (currentSessionIndex !== -1) {
+                    saveSessionData();
                 }
             } catch (error) {
                 console.error("Error in source text input handler:", error);
             }
         };
         
-        UI.DOM.srcText.addEventListener("input", inputHandler);
+        DOM.srcText.addEventListener("input", inputHandler);
         
-        UI.DOM.srcText.addEventListener("keydown", e => {
+        DOM.srcText.addEventListener("keydown", e => {
             try {
                 if (e.key === "Enter" && e.ctrlKey) {
                     e.preventDefault();
-                    STACY.Transl.processTranslation();
+                    processTranslation();
                 }
             } catch (error) {
                 console.error("Error in keydown handler:", error);
@@ -193,24 +163,23 @@ try {
         });
     }
     // Ajout : mettre à jour la détection de langue lors du changement de la langue source
-    if (UI.DOM.srcSel) {
-        UI.DOM.srcSel.addEventListener("change", () => {
-            Transl.updateDetectedLanguage();
+    if (DOM.srcSel) {
+        DOM.srcSel.addEventListener("change", () => {
+            updateDetectedLanguage();
         });
     }
 } catch (error) {
     console.error("Error setting up source text listeners:", error);
 }
 
-// translate button
 try {
-    if (UI.DOM.translateBtn) {
-        UI.DOM.translateBtn.onclick = () => {
+    if (DOM.translateBtn) {
+        DOM.translateBtn.onclick = () => {
             try {
-                STACY.Transl.processTranslation();
+                processTranslation();
             } catch (error) {
                 console.error("Error in translate button handler:", error);
-                UI.showError(new Error("Translation failed"));
+                showError(new Error("Translation failed"));
             }
         };
     }
@@ -218,19 +187,18 @@ try {
     console.error("Error setting up translate button listener:", error);
 }
 
-// new session button
 try {
-    if (UI.DOM.newSessionBtn) {
-        UI.DOM.newSessionBtn.onclick = () => {
+    if (DOM.newSessionBtn) {
+        DOM.newSessionBtn.onclick = () => {
             try {
-                if (typeof Sessions.showSessionTypeModal === 'function') {
-                    Sessions.showSessionTypeModal();
+                if (typeof showSessionTypeModal === 'function') {
+                    showSessionTypeModal();
                 } else {
-                    Sessions.addSession();
+                    addSession();
                 }
             } catch (error) {
                 console.error("Error in new session handler:", error);
-                UI.showError(new Error("Failed to create new session"));
+                showError(new Error("Failed to create new session"));
             }
         };
     }
@@ -238,15 +206,25 @@ try {
     console.error("Error setting up new session button listener:", error);
 }
 
-// doc translate button
 try {
-    if (UI.DOM.docTranslateBtn) {
-        UI.DOM.docTranslateBtn.onclick = () => {
+    if (DOM.docSourceEditor) {
+    }
+} catch (error) {
+    console.error("Error setting up doc source editor listener:", error);
+}
+
+try {
+    if (DOM.docTranslateBtn) {
+        DOM.docTranslateBtn.onclick = () => {
             try {
-                Doc.translateDocument();
+                if (typeof translateDocument === 'function') {
+                    translateDocument();
+                } else {
+                    showError(new Error("Document translation function not available"));
+                }
             } catch (error) {
                 console.error("Error in doc translate button handler:", error);
-                UI.showError(new Error("Document translation failed"));
+                showError(new Error("Document translation failed"));
             }
         };
     }
@@ -285,7 +263,7 @@ try {
             init();
         } catch (error) {
             console.error("Error during initialization:", error);
-            UI.showError(new Error("Application failed to start"));
+            showError(new Error("Application failed to start"));
         }
     });
 } catch (error) {
@@ -310,3 +288,17 @@ try {
 } catch (error) {
     console.error("Error setting up global error handlers:", error);
 }
+    window.addEventListener("error", e => {
+        console.error("Unhandled error:", e.error || e.message || "Unknown error");
+        if (typeof showError === 'function') {
+            showError(e.error || new Error("An unexpected error occurred"));
+        }
+    });
+    
+    window.addEventListener("unhandledrejection", e => {
+        console.error("Unhandled promise rejection:", e.reason);
+        if (typeof showError === 'function') {
+            showError(new Error("An unexpected error occurred"));
+        }
+        e.preventDefault();
+    });

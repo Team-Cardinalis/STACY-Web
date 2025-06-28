@@ -1,13 +1,13 @@
 "use strict";
 
-export const TITLE_MAX = 30;
-export const SESSION_TYPES = {
+const TITLE_MAX = 30;
+const SESSION_TYPES = {
     FAST: 'fast',
     DOC: 'doc'
 };
 
-export let sessions = [];
-export let currentSessionIndex = -1;
+let sessions = [];
+let currentSessionIndex = -1;
 
 try {
     const stored = localStorage.getItem("sessions");
@@ -24,7 +24,7 @@ try {
     sessions = [];
 }
 
-export const save = () => {
+const save = () => {
     try {
         localStorage.setItem("sessions", JSON.stringify(sessions));
     } catch (error) {
@@ -32,7 +32,7 @@ export const save = () => {
     }
 };
 
-export const addSession = (title, type = SESSION_TYPES.FAST) => {
+const addSession = (title, type = SESSION_TYPES.FAST) => {
     try {
         const sessionTitle = (title || "New Session").slice(0, TITLE_MAX);
         const newSession = {
@@ -127,7 +127,7 @@ const showSessionTypeModal = () => {
     }
 };
 
-export const deleteSession = index => {
+const deleteSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             throw new Error("Invalid session index");
@@ -149,7 +149,7 @@ export const deleteSession = index => {
     }
 };
 
-export const renameSession = index => {
+const renameSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             throw new Error("Invalid session index");
@@ -197,7 +197,7 @@ export const renameSession = index => {
     }
 };
 
-export const renderSessions = () => {
+const renderSessions = () => {
     try {
         if (!DOM.sessionsEl) {
             return;
@@ -248,7 +248,7 @@ export const renderSessions = () => {
     }
 };
 
-export const setCurrentSession = index => {
+const setCurrentSession = index => {
     try {
         if (typeof index !== 'number' || index < 0 || index >= sessions.length) {
             return;
@@ -272,7 +272,7 @@ export const setCurrentSession = index => {
     }
 };
 
-export const loadSessionData = () => {
+const loadSessionData = () => {
     try {
         const session = sessions[currentSessionIndex];
         if (!session) return;
@@ -323,7 +323,7 @@ export const loadSessionData = () => {
     }
 };
 
-export const saveSessionData = () => {
+const saveSessionData = () => {
     try {
         if (currentSessionIndex === -1 || !sessions[currentSessionIndex]) return;
         
