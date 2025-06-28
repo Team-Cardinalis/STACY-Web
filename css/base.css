@@ -19,17 +19,17 @@ body {
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
-    /* Improve mobile touch interactions */
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
 }
 
-/* Prevent text selection on interactive elements */
+/* Unified touch interaction styles */
 button, 
 .floating-btn, 
 .copy-btn, 
 .translate-btn,
-.mobile-sidebar-toggle {
+.mobile-sidebar-toggle,
+.toolbar-btn,
+.send-btn,
+.export-pdf-btn {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -45,24 +45,37 @@ button:focus,
 .floating-btn:focus,
 .copy-btn:focus,
 .translate-btn:focus,
-.mobile-sidebar-toggle:focus {
+.mobile-sidebar-toggle:focus,
+.toolbar-btn:focus,
+.send-btn:focus,
+.export-pdf-btn:focus {
     outline: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-::-webkit-scrollbar {
+/* Unified scrollbar styles */
+::-webkit-scrollbar,
+.custom-dropdown-menu::-webkit-scrollbar {
     width: 6px;
 }
 
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track,
+.custom-dropdown-menu::-webkit-scrollbar-track {
     background: var(--bg-secondary);
+    border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb,
+.custom-dropdown-menu::-webkit-scrollbar-thumb {
     background: var(--surface);
     border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover,
+.custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
     background: var(--surface-hover);
+}
+
+.custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }

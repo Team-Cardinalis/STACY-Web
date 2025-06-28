@@ -31,6 +31,14 @@
     transition: var(--transition);
 }
 
+.detected-language:empty {
+    display: none;
+}
+
+.detected-language[style*="display: none"] {
+    display: none !important;
+}
+
 .detected-language[style*="--error"] {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid var(--error);
@@ -40,4 +48,28 @@
     margin-left: auto;
     display: flex;
     gap: 8px;
+}
+
+/* Desktop: Move translate button to the right in fast translation mode */
+@media (min-width: 769px) {
+    .translation-container .section-footer {
+        justify-content: flex-end;
+        background-color: transparent;
+        border: none;
+    }
+    
+    .translation-container .translation-section:first-child .section-footer {
+        justify-content: flex-end;
+    }
+    
+    .translation-container .section-footer .translate-btn {
+        margin-left: auto;
+    }
+}
+
+/* Mobile: Center translate button in fast mode */
+@media (max-width: 768px) {
+    .translation-container .translation-section:first-child .section-footer {
+        justify-content: center;
+    }
 }

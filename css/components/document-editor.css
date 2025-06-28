@@ -41,17 +41,25 @@
     position: relative;
 }
 
-.doc-editor {
+/* Shared editor/preview base styles */
+.doc-editor,
+.doc-preview {
     flex: 1;
     padding: 24px;
     overflow-y: auto;
     background: transparent;
-    border: none;
-    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
     font-size: 15px;
     line-height: 1.8;
+}
+
+.doc-editor {
+    border: none;
+    color: var(--text-primary);
     outline: none;
-    font-family: 'Inter', sans-serif;
     white-space: pre-wrap;
     word-wrap: break-word;
     min-height: 400px;
@@ -65,32 +73,45 @@
     font-style: italic;
 }
 
-.doc-editor:focus {
-    outline: none;
-}
-
-.doc-editor p {
+/* Typography for editor and preview */
+.doc-editor p,
+.doc-preview p {
     margin-bottom: 16px;
     line-height: 1.8;
 }
 
-.doc-editor p:last-child {
+.doc-editor p:last-child,
+.doc-preview p:last-child {
     margin-bottom: 0;
 }
 
-.doc-editor strong {
+.doc-preview p {
+    color: var(--text-primary);
+    text-align: justify;
+}
+
+.doc-editor strong,
+.doc-preview strong,
+.doc-editor em,
+.doc-preview em,
+.doc-editor u,
+.doc-preview u {
+    color: var(--text-primary);
+}
+
+.doc-editor strong,
+.doc-preview strong {
     font-weight: 600;
-    color: var(--text-primary);
 }
 
-.doc-editor em {
+.doc-editor em,
+.doc-preview em {
     font-style: italic;
-    color: var(--text-primary);
 }
 
-.doc-editor u {
+.doc-editor u,
+.doc-preview u {
     text-decoration: underline;
-    color: var(--text-primary);
 }
 
 .doc-textarea-hidden {
@@ -107,37 +128,6 @@
 
 .doc-stats .separator {
     opacity: 0.5;
-}
-
-.doc-preview {
-    flex: 1;
-    padding: 24px;
-    overflow-y: auto;
-    background: transparent;
-    font-family: 'Inter', sans-serif;
-    width: 100%;
-    height: 100%;
-    max-height: 100%;
-}
-
-.doc-preview p {
-    margin-bottom: 16px;
-    line-height: 1.8;
-    color: var(--text-primary);
-    text-align: justify;
-    font-size: 15px;
-}
-
-.doc-preview strong {
-    font-weight: 600;
-}
-
-.doc-preview em {
-    font-style: italic;
-}
-
-.doc-preview u {
-    text-decoration: underline;
 }
 
 .doc-preview-placeholder {
@@ -162,21 +152,18 @@
     font-style: italic;
 }
 
+/* Mobile optimizations */
 @media (max-width: 768px) {
     .doc-editor-container {
         height: 100%;
     }
     
-    .doc-editor {
+    .doc-editor,
+    .doc-preview {
         min-height: 120px;
         padding: 16px;
         font-size: 16px;
         line-height: 1.6;
-    }
-    
-    .doc-preview {
-        padding: 16px;
-        font-size: 16px;
     }
     
     .doc-preview p {
@@ -191,14 +178,14 @@
         padding: 8px;
     }
     
-    .doc-stats .separator {
-        display: none;
-    }
-    
     .doc-stats {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
+    }
+    
+    .doc-stats .separator {
+        display: none;
     }
     
     .doc-section:not(.doc-source-section) {

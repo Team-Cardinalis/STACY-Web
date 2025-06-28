@@ -206,8 +206,8 @@ const translateDocument = async () => {
         DOM.docTranslateBtn.textContent = "Translating...";
         
         const paragraphs = splitIntoTranslatableParagraphs(sourceText);
-        let srcLang = DOM.docSourceLang?.value || "AUTO";
-        let tgtLang = DOM.docTargetLang?.value || "en";
+        let srcLang = DOM.docSourceLang?.getValue ? DOM.docSourceLang.getValue() : (DOM.docSourceLang?.value || "AUTO");
+        let tgtLang = DOM.docTargetLang?.getValue ? DOM.docTargetLang.getValue() : (DOM.docTargetLang?.value || "en");
         
         if (srcLang === "AUTO") {
             try {

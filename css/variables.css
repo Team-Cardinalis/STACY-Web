@@ -1,4 +1,5 @@
 :root {
+    /* Colors */
     --bg-primary: #0a0a0a;
     --bg-secondary: #111111;
     --bg-tertiary: #1a1a1a;
@@ -15,21 +16,29 @@
     --border-light: #2a2a2a;
     --success: #10b981;
     --warning: #f59e0b;
+    --warning-hover: #d97706;
     --error: #ef4444;
+    --info: #3b82f6;
+    
+    /* Layout */
     --radius: 7px;
     --radius-lg: 16px;
     --spacing: 16px;
     --sidebar-width: 280px;
     --header-height: 80px;
+    
+    /* Transitions */
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s ease-in-out;
     --transition-slow: all 0.3s ease;
-    --animation-duration: 0.4s;
-    --animation-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    --gradient-rotating: conic-gradient(from 0deg, #1e40af 0%, #2563eb 20%, #3b82f6 40%, #60a5fa 60%, #3b82f6 80%, #2563eb 90%, #1e40af 100%);
-    
-    /* Animation variables for mobile */
     --mobile-transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --mobile-transition-fast: all 0.2s ease-in-out;
     --mobile-sidebar-duration: 0.4s;
+    
+    /* Animations */
+    --animation-duration: 0.4s;
+    --animation-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* Gradients */
+    --gradient-rotating: conic-gradient(from 0deg, #1e40af 0%, #2563eb 20%, #3b82f6 40%, #60a5fa 60%, #3b82f6 80%, #2563eb 90%, #1e40af 100%);
 }

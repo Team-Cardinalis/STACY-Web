@@ -56,21 +56,12 @@
             <div class="translation-container" id="translation-container">
                 <div class="translation-section">
                     <div class="section-header">
-                        <div class="section-title">Source Text</div>
+                        <div class="char-count" id="char-count">0 characters</div>
                         <div style="display: flex; align-items: center;">
                             <div class="detected-language" id="detected-lang" style="margin-right: 8px;"></div>
                             <div class="language-selector">
-                                <select id="source-lang">
-                                    <option value="AUTO">Auto-detect</option>
-                                    <option value="fr">French</option>
-                                    <option value="en">English</option>
-                                    <option value="es">Spanish</option>
-                                    <option value="de">German</option>
-                                    <option value="it">Italian</option>
-                                    <option value="ru">Russian</option>
-                                    <option value="ja">Japanese</option>
-                                    <option value="ar">Arabic</option>
-                                </select>
+                                <div id="source-lang"></div>
+                                <select id="source-lang-custom" style="display: none;"></select>
                             </div>
                         </div>
                     </div>
@@ -82,7 +73,6 @@
                         ></textarea>
                     </div>
                     <div class="section-footer">
-                        <div class="char-count" id="char-count">0 characters</div>
                         <button class="translate-btn" id="translate-btn">
                             Translate
                         </button>
@@ -91,18 +81,9 @@
                 
                 <div class="translation-section">
                     <div class="section-header">
-                        <div class="section-title">Translation</div>
                         <div class="language-selector">
-                            <select id="target-lang">
-                                <option value="fr">French</option>
-                                <option value="en" selected>English</option>
-                                <option value="es">Spanish</option>
-                                <option value="de">German</option>
-                                <option value="it">Italian</option>
-                                <option value="ru">Russian</option>
-                                <option value="ja">Japanese</option>
-                                <option value="ar">Arabic</option>
-                            </select>
+                            <div id="target-lang"></div>
+                            <select id="target-lang-custom" style="display: none;"></select>
                         </div>
                     </div>
                     <div class="section-content">
@@ -166,17 +147,8 @@
                             </button>
                         </div>
                         <div class="language-selector">
-                            <select id="doc-source-lang">
-                                <option value="AUTO">Auto-detect</option>
-                                <option value="fr">French</option>
-                                <option value="en">English</option>
-                                <option value="es">Spanish</option>
-                                <option value="de">German</option>
-                                <option value="it">Italian</option>
-                                <option value="ru">Russian</option>
-                                <option value="ja">Japanese</option>
-                                <option value="ar">Arabic</option>
-                            </select>
+                            <div id="doc-source-lang"></div>
+                            <select id="doc-source-lang-custom" style="display: none;"></select>
                         </div>
                     </div>
                     <div class="section-content">
@@ -210,16 +182,8 @@
                 <div class="doc-section doc-preview-section">
                     <div class="section-header">
                         <div class="language-selector">
-                            <select id="doc-target-lang">
-                                <option value="fr">French</option>
-                                <option value="en" selected>English</option>
-                                <option value="es">Spanish</option>
-                                <option value="de">German</option>
-                                <option value="it">Italian</option>
-                                <option value="ru">Russian</option>
-                                <option value="ja">Japanese</option>
-                                <option value="ar">Arabic</option>
-                            </select>
+                            <div id="doc-target-lang"></div>
+                            <select id="doc-target-lang-custom" style="display: none;"></select>
                         </div>
                     </div>
                     <div class="section-content">

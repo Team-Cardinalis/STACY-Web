@@ -15,7 +15,8 @@ const updateDetectedLanguage = () => {
             return;
         }
 
-        if (DOM.srcSel.value !== "AUTO") {
+        const srcValue = DOM.srcSel.getValue ? DOM.srcSel.getValue() : DOM.srcSel.value;
+        if (srcValue !== "AUTO") {
             // Hide detected language if not in AUTO mode
             DOM.detectedLangEl.textContent = "";
             DOM.detectedLangEl.style.display = "none";
@@ -43,15 +44,20 @@ const updateDetectedLanguage = () => {
                 const langCode = await detectLang(text);
 
                 if (isSupportedLanguage(langCode)) {
-                    DOM.detectedLangEl.textContent = `Detected: ${LANG_MAP[langCode]}`;
+                    DOM.detectedLangEl.textContent = `${LANG_MAP[langCode]}`;
                     DOM.detectedLangEl.style.color = "var(--text-muted)";
                     DOM.detectedLangEl.style.display = ""; // Ensure visible
 
                     if (DOM.tgtSel) {
-                        DOM.tgtSel.value = langCode === "en" ? "fr" : "en";
+                        const newTarget = langCode === "en" ? "fr" : "en";
+                        if (DOM.tgtSel.setValue) {
+                            DOM.tgtSel.setValue(newTarget);
+                        } else {
+                            DOM.tgtSel.value = newTarget;
+                        }
                     }
                 } else {
-                    DOM.detectedLangEl.textContent = "Detected: Unknown";
+                    DOM.detectedLangEl.textContent = "Unknown";
                     DOM.detectedLangEl.style.color = "var(--error)";
                     DOM.detectedLangEl.style.display = ""; // Ensure visible
                 }
@@ -74,12 +80,7 @@ const adjustLanguage = (src, tgt) => {
         if (!src || !tgt) return tgt || "en";
         if (tgt !== src) return tgt;
 
-        if (!DOM.tgtSel) {
-            console.error("Target language selector not found");
-            return tgt;
-        }
-
-        const alternatives = Array.from(DOM.tgtSel.options).map(opt => opt.value);
+        const alternatives = ['fr', 'en', 'es', 'de', 'it', 'ru', 'ja', 'ar'];
         return alternatives.find(lang => lang !== src) || tgt;
     } catch (error) {
         console.error("Error adjusting language:", error);
@@ -100,8 +101,8 @@ const processTranslation = async () => {
             return;
         }
 
-        let srcLang = DOM.srcSel?.value || "AUTO";
-        let tgtLang = DOM.tgtSel?.value || "en";
+        let srcLang = DOM.srcSel?.getValue ? DOM.srcSel.getValue() : (DOM.srcSel?.value || "AUTO");
+        let tgtLang = DOM.tgtSel?.getValue ? DOM.tgtSel.getValue() : (DOM.tgtSel?.value || "en");
 
         if (srcLang === "AUTO") {
             try {

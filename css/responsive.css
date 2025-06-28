@@ -1,4 +1,5 @@
 @media (max-width: 768px) {
+    /* Sidebar mobile behavior */
     .sidebar {
         position: fixed;
         left: -100%;
@@ -50,7 +51,9 @@
         pointer-events: none;
     }
     
-    .translation-container {
+    /* Container mobile layout */
+    .translation-container,
+    .doc-container {
         flex-direction: column;
         padding: 0;
         gap: 0;
@@ -60,35 +63,43 @@
         transition: opacity var(--transition-fast);
     }
     
-    .translation-container.initialized {
+    .translation-container.initialized,
+    .doc-container.initialized {
         opacity: 1;
     }
     
-    .translation-section {
+    /* Section mobile layout */
+    .translation-section,
+    .doc-section {
         flex: 1;
         min-height: 0;
         border-left: none;
         border-bottom: 1px solid var(--border);
     }
     
-    .translation-section:last-child {
+    .translation-section:last-child,
+    .doc-section:last-child {
         border-bottom: none;
     }
     
-    .section-header {
+    .section-header,
+    .doc-section .section-header {
         border-top: 1px solid var(--border);
         padding: 12px 16px;
         min-height: 56px;
         flex-shrink: 0;
     }
     
-    .section-content {
+    .section-content,
+    .doc-section .section-content {
         flex: 1;
         min-height: 0;
         overflow: hidden;
     }
     
-    .translation-textarea {
+    /* Input/textarea mobile optimizations */
+    .translation-textarea,
+    .doc-editor {
         height: 100%;
         min-height: 120px;
         padding: 16px;
@@ -97,12 +108,36 @@
         font-size: 16px; /* Prevent zoom on iOS */
     }
     
-    .section-footer {
+    .doc-preview {
+        height: 100%;
+        min-height: 120px;
+        padding: 16px;
+        font-size: 16px;
+    }
+    
+    /* Footer mobile layout */
+    .section-footer,
+    .doc-section .section-footer {
+        background-color: transparent;
+        border: none;
         padding: 12px 16px;
         min-height: 60px;
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
+    .translation-container .translation-section:last-child .section-footer,
+    .doc-section:last-child .section-footer {
+        display: none;
+    }
+    
+    .translation-container .translation-section:last-child .section-footer {
+        justify-content: flex-end;
+    }
+    
+    /* Language and controls mobile sizing */
     .detected-language {
         margin-left: 0;
         text-align: center;
@@ -110,23 +145,37 @@
         margin-right: 8px;
     }
     
-    .detected-language:empty {
-        display: none;
+    .detected-language:empty,
+    .detected-language[style*="display: none"] {
+        display: none !important;
     }
     
-    .language-selector select {
+    .language-selector select,
+    .language-selector .custom-dropdown-button {
         font-size: 14px;
         padding: 6px 8px;
     }
     
-    .translate-btn {
+    .language-selector .custom-dropdown-item {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    
+    /* Button mobile optimizations */
+    .translate-btn,
+    .copy-btn,
+    .export-pdf-btn {
         min-height: 44px;
         font-size: 16px;
         padding: 12px 24px;
     }
     
+    .translate-btn {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--accent-hover);
+    }
+    
     .copy-btn {
-        min-height: 44px;
         padding: 12px 16px;
     }
     
@@ -134,6 +183,7 @@
         font-size: 12px;
     }
     
+    /* Mobile sidebar toggle */
     .mobile-sidebar-toggle {
         position: fixed;
         bottom: 20px;
@@ -172,7 +222,7 @@
         opacity: 0.5;
     }
     
-    /* Floating Action Buttons */
+    /* Floating action buttons */
     .floating-actions {
         position: fixed;
         bottom: 20px;
@@ -198,17 +248,6 @@
         transition: var(--transition), transform var(--transition-slow);
         font-size: 16px;
         position: relative;
-        /* Prevent blue selection highlight on mobile */
-        -webkit-tap-highlight-color: transparent;
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        outline: none;
-        /* Improve touch interaction */
-        touch-action: manipulation;
     }
     
     .floating-btn:hover {
@@ -218,14 +257,6 @@
     
     .floating-btn:active {
         transform: scale(0.95);
-        /* Override any default active styles */
-        outline: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    .floating-btn:focus {
-        outline: none;
-        -webkit-tap-highlight-color: transparent;
     }
     
     .floating-btn.copy-fab {
@@ -243,7 +274,7 @@
     }
     
     .floating-btn.export-fab:hover {
-        background: var(--warning-hover, #d97706);
+        background: var(--warning-hover);
     }
     
     .floating-btn:disabled {
@@ -256,13 +287,12 @@
         background: var(--accent-hover);
     }
     
-    /* Hide floating buttons when sidebar is open */
     .floating-actions.sidebar-open {
         opacity: 0.3;
         pointer-events: none;
     }
     
-    /* Fast translation mode floating buttons */
+    /* Floating button visibility controls */
     .translation-container.initialized ~ .floating-actions .translation-fabs {
         display: flex;
         flex-direction: column;
@@ -273,7 +303,6 @@
         display: none;
     }
     
-    /* Document mode floating buttons */
     .doc-container.initialized ~ .floating-actions .doc-fabs {
         display: flex;
         flex-direction: column;
@@ -284,70 +313,7 @@
         display: none;
     }
     
-    .translation-section:last-child .section-footer {
-        display: none;
-    }
-    
-    .doc-container {
-        flex-direction: column;
-        padding: 0;
-        gap: 0;
-        height: 100%;
-        max-height: 100%;
-        overflow: hidden;
-        transition: opacity var(--transition-fast);
-    }
-    
-    .doc-container.initialized {
-        opacity: 1;
-    }
-    
-    .doc-section {
-        flex: 1;
-        min-height: 0;
-        border-left: none;
-    }
-    
-    .doc-section:last-child {
-        border-bottom: none;
-    }
-    
-    .doc-section:last-child .section-footer {
-        display: none;
-    }
-    
-    .doc-section .section-header {
-        padding: 12px 16px;
-        min-height: 56px;
-        flex-shrink: 0;
-    }
-    
-    .doc-section .section-content {
-        flex: 1;
-        min-height: 0;
-        overflow: hidden;
-    }
-    
-    .doc-editor {
-        height: 100%;
-        min-height: 120px;
-        padding: 16px;
-        font-size: 16px; /* Prevent zoom on iOS */
-    }
-    
-    .doc-preview {
-        height: 100%;
-        min-height: 120px;
-        padding: 16px;
-        font-size: 16px;
-    }
-    
-    .doc-section .section-footer {
-        padding: 12px 16px;
-        min-height: 60px;
-        flex-shrink: 0;
-    }
-    
+    /* Document editor mobile adjustments */
     .doc-toolbar {
         padding: 0 4px;
         gap: 2px;
@@ -363,19 +329,10 @@
         font-size: 11px;
         gap: 6px;
     }
-    
-    .export-pdf-btn {
-        min-height: 44px;
-        padding: 12px 16px;
-        font-size: 16px;
-    }
 }
 
 @media (min-width: 769px) {
-    .mobile-sidebar-toggle {
-        display: none;
-    }
-    
+    .mobile-sidebar-toggle,
     .floating-actions {
         display: none;
     }

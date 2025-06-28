@@ -2,6 +2,21 @@
 
 const init = async () => {
     try {
+        // Initialize custom language dropdowns first
+        try {
+            if (typeof initCustomLanguageDropdowns === 'function') {
+                const dropdowns = initCustomLanguageDropdowns();
+                if (!dropdowns) {
+                    console.warn("Custom language dropdowns initialization returned null");
+                }
+            }
+        } catch (error) {
+            console.error("Custom language dropdowns initialization failed:", error);
+        }
+        
+        // Add small delay to ensure dropdowns are fully created
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
         // Determine the session type early to prevent visual jump
         let initialSessionType = 'fast';
         if (sessions.length > 0) {
@@ -119,7 +134,8 @@ try {
                 
                 buttonStateTimeout = setTimeout(() => {
                     try {
-                        if (DOM.srcSel && DOM.srcSel.value === "AUTO" && DOM.detectedLangEl) {
+                        const srcValue = DOM.srcSel?.getValue ? DOM.srcSel.getValue() : DOM.srcSel?.value;
+                        if (srcValue === "AUTO" && DOM.detectedLangEl) {
                             const isUnsupported = DOM.detectedLangEl.textContent.includes("Unknown");
                             if (DOM.translateBtn) {
                                 DOM.translateBtn.disabled = isUnsupported && DOM.srcText.value.trim().length > 0;
@@ -162,11 +178,16 @@ try {
             }
         });
     }
-    // Ajout : mettre à jour la détection de langue lors du changement de la langue source
-    if (DOM.srcSel) {
-        DOM.srcSel.addEventListener("change", () => {
-            updateDetectedLanguage();
+    
+    // Add event listener for custom source language dropdown
+    try {
+        document.addEventListener('languageChange', (e) => {
+            if (e.target.id === 'source-lang-custom') {
+                updateDetectedLanguage();
+            }
         });
+    } catch (error) {
+        console.error("Error setting up custom dropdown listeners:", error);
     }
 } catch (error) {
     console.error("Error setting up source text listeners:", error);
