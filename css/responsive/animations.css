@@ -1,0 +1,17 @@
+/* ======================
+   REDUCED MOTION SUPPORT
+   ====================== */
+@media (prefers-reduced-motion: reduce) {
+    .toast {
+        animation: none;
+    }
+    
+    .toast.hide {
+        animation: none;
+        opacity: 0;
+    }
+    
+    .toast-progress {
+        animation: none;
+    }
+}

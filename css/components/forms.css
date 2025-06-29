@@ -45,31 +45,7 @@
 }
 
 .section-footer-flex {
-    margin-left: auto;
+    margin-right: auto;
     display: flex;
     gap: 8px;
-}
-
-/* Desktop: Move translate button to the right in fast translation mode */
-@media (min-width: 769px) {
-    .translation-container .section-footer {
-        justify-content: flex-end;
-        background-color: transparent;
-        border: none;
-    }
-    
-    .translation-container .translation-section:first-child .section-footer {
-        justify-content: flex-end;
-    }
-    
-    .translation-container .section-footer .translate-btn {
-        margin-left: auto;
-    }
-}
-
-/* Mobile: Center translate button in fast mode */
-@media (max-width: 768px) {
-    .translation-container .translation-section:first-child .section-footer {
-        justify-content: center;
-    }
 }

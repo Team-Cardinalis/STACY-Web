@@ -1,0 +1,43 @@
+/* ======================
+   DESKTOP RESPONSIVE STYLES
+   ====================== */
+@media (min-width: 769px) {
+    /* Hide mobile-only elements */
+    .mobile-sidebar-toggle,
+    .floating-actions {
+        display: none;
+    }
+    
+    /* Desktop layout adjustments */
+    .translation-container .section-footer,
+    .translation-container .translation-section:first-child .section-footer {
+        justify-content: space-between;
+    }
+    
+    .translation-container .section-footer {
+        background-color: transparent;
+        border: none;
+    }
+    
+    .translation-container .section-footer .translate-btn {
+        margin-left: auto;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+    }
+    
+    /* Position copy button on the left for desktop */
+    .section-footer-flex {
+        margin-right: auto;
+        margin-left: 0;
+    }
+    
+    /* Desktop button styles */
+    .translate-btn {
+        border-radius: 8px;
+    }
+    
+    .translate-btn:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+    }
+}

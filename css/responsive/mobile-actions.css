@@ -1,0 +1,135 @@
+@media (max-width: 768px) {
+    /* ======================
+       MOBILE SIDEBAR TOGGLE
+       ====================== */
+    .mobile-sidebar-toggle {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 56px;
+        height: 56px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        transition: var(--mobile-transition), 
+                   transform var(--mobile-transition);
+    }
+    
+    .mobile-sidebar-toggle.active {
+        background: var(--error);
+        transform: rotate(90deg);
+    }
+    
+    .mobile-sidebar-toggle:hover {
+        background: var(--accent-hover);
+        transform: scale(1.05);
+    }
+    
+    .mobile-sidebar-toggle:active {
+        transform: scale(0.95);
+    }
+    
+    .sidebar.open + .main-content + .mobile-sidebar-toggle {
+        opacity: 0.5;
+    }
+
+    /* ======================
+       FLOATING ACTION BUTTONS
+       ====================== */
+    .floating-actions {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 998;
+    }
+    
+    .floating-btn {
+        width: 56px;
+        height: 56px;
+        background: var(--accent);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        transition: var(--transition), transform var(--transition-slow);
+        font-size: 16px;
+        position: relative;
+    }
+    
+    .floating-btn:hover {
+        background: var(--accent-hover);
+        transform: scale(1.05);
+    }
+    
+    .floating-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .floating-btn.copy-fab {
+        background: var(--surface);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+    }
+    
+    .floating-btn.copy-fab:hover {
+        background: var(--surface-hover);
+    }
+    
+    .floating-btn.export-fab {
+        background: var(--warning);
+    }
+    
+    .floating-btn.export-fab:hover {
+        background: var(--warning-hover);
+    }
+    
+    .floating-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .floating-btn.success {
+        background: var(--accent-hover);
+    }
+    
+    .floating-actions.sidebar-open {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+    
+    /* Floating button visibility controls */
+    .translation-container.initialized ~ .floating-actions .translation-fabs {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .translation-container.hide ~ .floating-actions .translation-fabs {
+        display: none;
+    }
+    
+    .doc-container.initialized ~ .floating-actions .doc-fabs {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .doc-container:not(.show) ~ .floating-actions .doc-fabs {
+        display: none;
+    }
+}

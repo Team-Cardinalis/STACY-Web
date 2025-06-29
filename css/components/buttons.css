@@ -22,19 +22,10 @@
     color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
-    background: var(--accent-hover);
-}
-
 .btn-secondary {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-secondary);
-}
-
-.btn-secondary:hover:not(:disabled) {
-    border-color: var(--text-muted);
-    background: var(--surface);
 }
 
 /* Specialized buttons */
@@ -52,11 +43,6 @@
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-}
-
-.send-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
 }
 
 .send-btn:disabled {
@@ -94,29 +80,64 @@
     align-items: center;
     gap: 8px;
     letter-spacing: 0.5px;
-    padding: 12px 24px;
+    padding: 12px;
 }
 
 .translate-btn {
-    background: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 25px;
+    padding-right: 25px;
+    border: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10rem;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    cursor: pointer;
     color: white;
-    border-radius: 5px;
+    z-index: 2;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+    font-size: 14px;
+    gap: 8px;
+    letter-spacing: 0.5px;
 }
 
 .translate-btn:hover {
-    background: var(--accent-hover);
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+}
+
+.translate-btn:active {
+    transform: scale(0.97);
+}
+
+.translate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%);
 }
 
 .copy-btn,
 .export-pdf-btn {
-    background: transparent;
-    color: var(--text-secondary);
+    background: var(--surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .copy-btn:hover,
 .export-pdf-btn:hover {
     background: var(--surface-hover);
-    color: var(--text-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.copy-btn:active,
+.export-pdf-btn:active {
+    transform: scale(0.97);
 }
 
 .modal-btn {
@@ -129,10 +150,6 @@
     font-size: 14px;
     font-weight: 500;
     transition: var(--transition);
-}
-
-.modal-btn:hover {
-    background: var(--accent-hover);
 }
 
 .new-session-btn {
@@ -150,12 +167,4 @@
     font-size: 15px;
     font-weight: 500;
     box-shadow: none;
-}
-
-.new-session-btn:hover, 
-.new-session-btn:focus {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    outline: none;
 }

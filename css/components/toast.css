@@ -128,22 +128,6 @@
     background: linear-gradient(90deg, transparent, var(--info));
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    .toast {
-        animation: none;
-    }
-    
-    .toast.hide {
-        animation: none;
-        opacity: 0;
-    }
-    
-    .toast-progress {
-        animation: none;
-    }
-}
-
 /* Legacy compatibility */
 .error-toast {
     position: fixed;

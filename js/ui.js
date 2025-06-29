@@ -25,7 +25,13 @@ const DOM = {
         const customDropdown = $("target-lang-custom");
         return customDropdown || $("target-lang-select");
     },
-    get translateBtn() { return $("translate-btn"); },
+    get translateBtn() { 
+        const btn = $("translate-btn");
+        if (btn && !btn.querySelector('.hoverEffect')) {
+            addHoverEffectToButton(btn);
+        }
+        return btn;
+    },
     get detectedLangEl() { return $("detected-lang"); },
     get charCount() { return $("char-count"); },
     get newSessionBtn() { return document.querySelector(".new-session-btn"); },
@@ -35,7 +41,13 @@ const DOM = {
     get docPreviewArea() { return $("doc-preview-area"); },
     get docSourceText() { return $("doc-source-text"); },
     get docPreview() { return $("doc-preview"); },
-    get docTranslateBtn() { return $("doc-translate-btn"); },
+    get docTranslateBtn() { 
+        const btn = $("doc-translate-btn");
+        if (btn && !btn.querySelector('.hoverEffect')) {
+            addHoverEffectToButton(btn);
+        }
+        return btn;
+    },
     get docSourceEditor() { return $("doc-source-editor"); },
     get docSourceLang() { 
         const customDropdown = $("doc-source-lang-custom");
@@ -48,6 +60,29 @@ const DOM = {
     get docCharCount() { return $("doc-char-count"); },
     get docWordCount() { return $("doc-word-count"); },
     get docParagraphCount() { return $("doc-paragraph-count"); }
+};
+
+const addHoverEffectToButton = (button) => {
+    try {
+        if (!button || button.querySelector('.hoverEffect')) {
+            return;
+        }
+        
+        // Skip adding hover effect for translate buttons - they now use CSS gradients
+        if (button.classList.contains('translate-btn') || button.id === 'translate-btn' || button.id === 'doc-translate-btn') {
+            return;
+        }
+        
+        const hoverEffect = document.createElement('div');
+        hoverEffect.className = 'hoverEffect';
+        
+        const effectDiv = document.createElement('div');
+        hoverEffect.appendChild(effectDiv);
+        
+        button.appendChild(hoverEffect);
+    } catch (error) {
+        console.error('Error adding hover effect to button:', error);
+    }
 };
 
 const showError = err => {
@@ -508,3 +543,4 @@ window.switchToSessionType = switchToSessionType;
 window.initCustomLanguageDropdowns = initCustomLanguageDropdowns;
 window.createCustomDropdown = createCustomDropdown;
 window.closeAllCustomDropdowns = closeAllCustomDropdowns;
+window.addHoverEffectToButton = addHoverEffectToButton;

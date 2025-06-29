@@ -101,8 +101,7 @@
 .section-footer {
     min-height: 60px;
     padding: 20px;
-    background: var(--bg-secondary);
-    border-top: 1px solid var(--border);
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -112,12 +111,4 @@
 .char-count {
     font-size: 12px;
     color: var(--text-muted);
-}
-
-/* Desktop layout adjustments */
-@media (min-width: 769px) {
-    .translation-container .section-footer,
-    .translation-container .translation-section:first-child .section-footer {
-        justify-content: flex-end;
-    }
 }

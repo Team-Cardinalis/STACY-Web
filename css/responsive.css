@@ -1,5 +1,7 @@
 @media (max-width: 768px) {
-    /* Sidebar mobile behavior */
+    /* ======================
+       SIDEBAR MOBILE BEHAVIOR
+       ====================== */
     .sidebar {
         position: fixed;
         left: -100%;
@@ -37,7 +39,10 @@
         opacity: 1;
         visibility: visible;
     }
-    
+
+    /* ======================
+       MAIN CONTENT MOBILE
+       ====================== */
     .main-content {
         width: 100%;
         height: 100vh;
@@ -51,7 +56,9 @@
         pointer-events: none;
     }
     
-    /* Container mobile layout */
+    /* ======================
+       CONTAINER MOBILE LAYOUT
+       ====================== */
     .translation-container,
     .doc-container {
         flex-direction: column;
@@ -68,7 +75,9 @@
         opacity: 1;
     }
     
-    /* Section mobile layout */
+    /* ======================
+       SECTION MOBILE LAYOUT
+       ====================== */
     .translation-section,
     .doc-section {
         flex: 1;
@@ -96,10 +105,11 @@
         min-height: 0;
         overflow: hidden;
     }
-    
-    /* Input/textarea mobile optimizations */
-    .translation-textarea,
-    .doc-editor {
+
+    /* ======================
+       FORMS MOBILE
+       ====================== */
+    .translation-textarea {
         height: 100%;
         min-height: 120px;
         padding: 16px;
@@ -108,15 +118,99 @@
         font-size: 16px; /* Prevent zoom on iOS */
     }
     
-    .doc-preview {
+    .section-footer {
+        background-color: transparent;
+        border: none;
+        padding: 12px 16px;
+        min-height: 60px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .translation-container .translation-section:last-child .section-footer {
+        display: none;
+    }
+    
+    .translation-container .translation-section:first-child .section-footer {
+        justify-content: center;
+    }
+    
+    .detected-language {
+        margin-left: 0;
+        text-align: center;
+        font-size: 12px;
+        margin-right: 8px;
+    }
+
+    /* ======================
+       BUTTONS MOBILE
+       ====================== */
+    .translate-btn,
+    .copy-btn,
+    .export-pdf-btn {
+        min-height: 44px;
+        font-size: 16px;
+        padding: 15px 30px;
+    }
+    
+    .translate-btn {
+        box-shadow: 0 0px 7px -5px rgba(0, 0, 0, 0.5);
+        border-radius: 10rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .copy-btn {
+        padding: 12px 16px;
+    }
+    
+    .char-count {
+        font-size: 12px;
+    }
+
+    /* ======================
+       DOCUMENT EDITOR MOBILE
+       ====================== */
+    .doc-editor-container {
         height: 100%;
+    }
+    
+    .doc-editor,
+    .doc-preview {
         min-height: 120px;
         padding: 16px;
         font-size: 16px;
+        line-height: 1.6;
     }
     
-    /* Footer mobile layout */
-    .section-footer,
+    .doc-preview p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 12px;
+    }
+    
+    .doc-toolbar {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px;
+    }
+    
+    .doc-stats {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .doc-stats .separator {
+        display: none;
+    }
+    
+    .doc-section:not(.doc-source-section) {
+        border-left: none;
+    }
+    
     .doc-section .section-footer {
         background-color: transparent;
         border: none;
@@ -128,26 +222,49 @@
         justify-content: center;
     }
     
-    .translation-container .translation-section:last-child .section-footer,
     .doc-section:last-child .section-footer {
         display: none;
     }
     
-    .translation-container .translation-section:last-child .section-footer {
-        justify-content: flex-end;
+    .toolbar-btn {
+        width: 36px;
+        height: 36px;
+        min-height: 36px;
     }
     
-    /* Language and controls mobile sizing */
-    .detected-language {
-        margin-left: 0;
-        text-align: center;
+    .doc-stats {
+        font-size: 11px;
+        gap: 6px;
+    }
+
+    /* ======================
+       CUSTOM DROPDOWN MOBILE
+       ====================== */
+    .custom-language-dropdown {
+        min-width: 120px;
+    }
+    
+    .language-selector .custom-dropdown-button {
+        padding: 6px 8px;
         font-size: 12px;
-        margin-right: 8px;
     }
     
-    .detected-language:empty,
-    .detected-language[style*="display: none"] {
-        display: none !important;
+    .language-selector .custom-dropdown-item {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    
+    .dropdown-item-text {
+        margin-left: 6px;
+    }
+    
+    .dropdown-item-flag {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .dropdown-item-flag-placeholder {
+        font-size: 14px;
     }
     
     .language-selector select,
@@ -160,31 +277,10 @@
         font-size: 12px;
         padding: 8px 10px;
     }
-    
-    /* Button mobile optimizations */
-    .translate-btn,
-    .copy-btn,
-    .export-pdf-btn {
-        min-height: 44px;
-        font-size: 16px;
-        padding: 12px 24px;
-    }
-    
-    .translate-btn {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--accent-hover);
-        border-radius: 100px;
-    }
-    
-    .copy-btn {
-        padding: 12px 16px;
-    }
-    
-    .char-count {
-        font-size: 12px;
-    }
-    
-    /* Mobile sidebar toggle */
+
+    /* ======================
+       MOBILE SIDEBAR TOGGLE
+       ====================== */
     .mobile-sidebar-toggle {
         position: fixed;
         bottom: 20px;
@@ -222,8 +318,10 @@
     .sidebar.open + .main-content + .mobile-sidebar-toggle {
         opacity: 0.5;
     }
-    
-    /* Floating action buttons */
+
+    /* ======================
+       FLOATING ACTION BUTTONS
+       ====================== */
     .floating-actions {
         position: fixed;
         bottom: 20px;
@@ -313,28 +411,66 @@
     .doc-container:not(.show) ~ .floating-actions .doc-fabs {
         display: none;
     }
-    
-    /* Document editor mobile adjustments */
-    .doc-toolbar {
-        padding: 0 4px;
-        gap: 2px;
-    }
-    
-    .toolbar-btn {
-        width: 36px;
-        height: 36px;
-        min-height: 36px;
-    }
-    
-    .doc-stats {
-        font-size: 11px;
-        gap: 6px;
-    }
 }
 
+/* ======================
+   DESKTOP RESPONSIVE STYLES
+   ====================== */
 @media (min-width: 769px) {
+    /* Hide mobile-only elements */
     .mobile-sidebar-toggle,
     .floating-actions {
         display: none;
+    }
+    
+    /* Desktop layout adjustments */
+    .translation-container .section-footer,
+    .translation-container .translation-section:first-child .section-footer {
+        justify-content: space-between;
+    }
+    
+    .translation-container .section-footer {
+        background-color: transparent;
+        border: none;
+    }
+    
+    .translation-container .section-footer .translate-btn {
+        margin-left: auto;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+    }
+    
+    /* Position copy button on the left for desktop */
+    .section-footer-flex {
+        margin-right: auto;
+        margin-left: 0;
+    }
+    
+    /* Desktop button styles */
+    .translate-btn {
+        border-radius: 8px;
+    }
+    
+    .translate-btn:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+    }
+}
+
+/* ======================
+   REDUCED MOTION SUPPORT
+   ====================== */
+@media (prefers-reduced-motion: reduce) {
+    .toast {
+        animation: none;
+    }
+    
+    .toast.hide {
+        animation: none;
+        opacity: 0;
+    }
+    
+    .toast-progress {
+        animation: none;
     }
 }

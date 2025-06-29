@@ -1,7 +1,7 @@
 @import url('variables.css');
 @import url('base.css');
 @import url('animations.css');
-@import url('doc-progress.css');
+@import url('components/doc-progress.css');
 @import url('layout/sidebar.css');
 @import url('layout/main-content.css');
 @import url('components/buttons.css');
@@ -12,29 +12,12 @@
 @import url('components/logo.css');
 @import url('components/sessions.css');
 @import url('components/document-editor.css');
-@import url('responsive.css');
 @import url('components/inputs.css');
 @import url('components/toolbars.css');
 @import url('components/progress-bar.css');
 @import url('components/toast.css');
-
-/* Custom dropdown flag styling */
-.custom-language-dropdown .dropdown-item-flag {
-    filter: grayscale(100%);
-    transition: filter 0.2s ease;
-}
-
-/* Flag in color when item is hovered */
-.custom-language-dropdown .custom-dropdown-item:hover .dropdown-item-flag {
-    filter: grayscale(0%);
-}
-
-/* Flag in color when item is selected (active dropdown button) */
-.custom-language-dropdown .custom-dropdown-button .dropdown-item-flag {
-    filter: grayscale(0%);
-}
-
-/* Flag in color for the currently selected item in the dropdown menu */
-.custom-language-dropdown .custom-dropdown-item[data-selected="true"] .dropdown-item-flag {
-    filter: grayscale(0%);
-}
+@import url('responsive/mobile.css');
+@import url('responsive/mobile-forms.css');
+@import url('responsive/mobile-actions.css');
+@import url('responsive/desktop.css');
+@import url('responsive/animations.css');
