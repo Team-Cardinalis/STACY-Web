@@ -1,5 +1,7 @@
 "use strict";
 
+const exportIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="#ffffff" d="M15.245 16.498a.75.75 0 0 1 .101 1.493l-.101.007H4.75a.75.75 0 0 1-.102-1.493l.102-.007zM10.004 2a.75.75 0 0 1 .743.648l.007.102l-.001 10.193l2.966-2.97a.75.75 0 0 1 .977-.074l.084.072a.75.75 0 0 1 .073.977l-.072.084l-4.243 4.25l-.07.063l-.092.059l-.036.021l-.091.038l-.12.03l-.07.008l-.06.002a.7.7 0 0 1-.15-.016l-.082-.023a.7.7 0 0 1-.257-.146l-4.29-4.285a.75.75 0 0 1 .976-1.134l.084.073l2.973 2.967V2.75a.75.75 0 0 1 .75-.75"/></svg>`;
+
 const MAX_PARAGRAPH_LENGTH = 1000;
 
 const splitIntoTranslatableParagraphs = (text) => {
@@ -145,6 +147,7 @@ const setupDocumentEditor = () => {
         }
         
         injectExportIcon();
+        injectCopyIcon();
         
     } catch (error) {
         console.error("Error setting up document editor:", error);
@@ -272,22 +275,22 @@ const updateDocumentPreview = () => {
     try {
         const currentSession = sessions[currentSessionIndex];
         if (!currentSession || !DOM.docPreview) return;
-        
+
         const translatedText = currentSession.paragraphs
             ?.map(p => p.translated || p.original)
             .join('\n\n') || "";
-            
+
         if (translatedText.trim()) {
             DOM.docPreview.innerHTML = translatedText
                 .split('\n\n')
                 .map(paragraph => `<p>${paragraph}</p>`)
                 .join('');
         } else {
-            // Use static SVG if documentIcon is empty
-            const DOC_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M17 2v7a3 3 0 0 0 3 3h7v15a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V5a3 3 0 0 1 3-3zm2 .117V9a1 1 0 0 0 1 1h6.883a3 3 0 0 0-.762-1.293L20.293 2.88A3 3 0 0 0 19 2.117"/></svg>`;
+            // Utilisez exportIconSVG si documentIcon est vide
+            let svgContent = (typeof documentIcon !== 'undefined' && documentIcon) ? documentIcon : exportIconSVG;
             DOM.docPreview.innerHTML = `
                 <div class="doc-preview-placeholder">
-                    <div class="doc-placeholder-icon">${typeof documentIcon !== 'undefined' && documentIcon ? documentIcon : DOC_SVG}</div>
+                    <div class="doc-placeholder-icon">${svgContent}</div>
                     <p>Document translation will appear here</p>
                 </div>
             `;
@@ -355,16 +358,15 @@ const exportDocumentToPDF = () => {
     }
 };
 
-const injectExportIcon = async () => {
+const injectExportIcon = () => {
     try {
         const btn = document.getElementById('doc-export-btn');
-        if (btn && !btn.querySelector('svg')) {
-            const resp = await fetch('./icons/export.svg');
-            if (resp.ok) {
-                const svg = await resp.text();
-                btn.innerHTML = `${svg} Export PDF`;
+        if (btn) {
+            const iconSpan = btn.querySelector('#export-pdf-icon');
+            if (iconSpan) {
+                iconSpan.innerHTML = exportIconSVG;
             } else {
-                btn.textContent = "Export PDF";
+                btn.innerHTML = `${exportIconSVG} Export PDF`;
             }
         }
     } catch (e) {
@@ -373,6 +375,14 @@ const injectExportIcon = async () => {
         if (btn) btn.textContent = "Export PDF";
     }
 };
+
+function injectCopyIcon() {
+    const btn = document.querySelector('.copy-btn');
+    if (btn) {
+        // SVG en dur (copied from icons/copy.svg)
+        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="#ffffff" fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/></svg>`;
+    }
+}
 
 window.translateDocument = translateDocument;
 window.exportDocumentToPDF = exportDocumentToPDF;
