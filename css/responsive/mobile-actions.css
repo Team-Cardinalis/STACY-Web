@@ -1,7 +1,4 @@
 @media (max-width: 768px) {
-    /* ======================
-       MOBILE SIDEBAR TOGGLE
-       ====================== */
     .mobile-sidebar-toggle {
         position: fixed;
         bottom: 20px;
@@ -40,9 +37,6 @@
         opacity: 0.5;
     }
 
-    /* ======================
-       FLOATING ACTION BUTTONS
-       ====================== */
     .floating-actions {
         position: fixed;
         bottom: 20px;
@@ -112,7 +106,6 @@
         pointer-events: none;
     }
     
-    /* Floating button visibility controls */
     .translation-container.initialized ~ .floating-actions .translation-fabs {
         display: flex;
         flex-direction: column;

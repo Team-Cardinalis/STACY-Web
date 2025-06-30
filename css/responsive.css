@@ -138,8 +138,6 @@
     }
     
     .detected-language {
-        margin-left: 0;
-        text-align: center;
         font-size: 12px;
         margin-right: 8px;
     }
@@ -168,6 +166,9 @@
     
     .char-count {
         font-size: 12px;
+        margin-right: auto;
+        margin-left: 0;
+        order: -1;
     }
 
     /* ======================
@@ -454,6 +455,13 @@
     
     .translate-btn:hover {
         background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
+    }
+
+    /* Align char-count to the far left in section-footer */
+    .translation-container .section-footer .char-count {
+        margin-right: auto;
+        margin-left: 0;
+        order: -1;
     }
 }
 

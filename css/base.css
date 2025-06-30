@@ -21,7 +21,6 @@ body {
     overflow: hidden;
 }
 
-/* Unified touch interaction styles */
 button, 
 .floating-btn, 
 .copy-btn, 
@@ -53,7 +52,6 @@ button:focus,
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Unified scrollbar styles */
 ::-webkit-scrollbar,
 .custom-dropdown-menu::-webkit-scrollbar {
     width: 6px;

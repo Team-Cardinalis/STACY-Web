@@ -1,6 +1,3 @@
-/* ======================
-   REDUCED MOTION SUPPORT
-   ====================== */
 @media (prefers-reduced-motion: reduce) {
     .toast {
         animation: none;

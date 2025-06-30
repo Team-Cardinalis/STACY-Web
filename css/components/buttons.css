@@ -125,14 +125,11 @@
     background: var(--surface);
     color: var(--text-primary);
     border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .copy-btn:hover,
 .export-pdf-btn:hover {
     background: var(--surface-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .copy-btn:active,

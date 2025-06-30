@@ -81,7 +81,16 @@ const init = async () => {
                 // Ignore errors
             }
             currentSessionIndex = lastIndex;
-            renderSessions();
+            
+            // Wait for session icons to be loaded before rendering sessions
+            const waitForIcons = () => {
+                if (typeof sessionIconsLoaded !== 'undefined' && !sessionIconsLoaded) {
+                    setTimeout(waitForIcons, 10);
+                } else {
+                    renderSessions();
+                }
+            };
+            waitForIcons();
             
             // Ensure UI is in correct state (redundant but safe)
             if (sessions[currentSessionIndex] && typeof switchToSessionType === 'function') {

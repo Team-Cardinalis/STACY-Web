@@ -7,6 +7,11 @@
     justify-content: center;
 }
 
+.session-type-badge img {
+    width: 20px;
+    height: 20px;
+}
+
 .session-type-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -42,11 +47,26 @@
     color: var(--item-active);
 }
 
+.session-type-icon-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    opacity: 0.8;
+    filter: grayscale(0%);
+    transition: filter 0.2s;
+}
+
+.session-type-option:hover .session-type-icon-img,
+.session-item.active .session-type-icon-img {
+    filter: grayscale(0%);
+    opacity: 1;
+}
+
 .session-type-title {
     font-size: 18px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .session-type-description {

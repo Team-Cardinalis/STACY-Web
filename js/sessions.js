@@ -9,6 +9,12 @@ const SESSION_TYPES = {
 let sessions = [];
 let currentSessionIndex = -1;
 
+let lightningIconPath = './icons/fast.svg';
+let documentIconPath = './icons/document.svg';
+let lightningActiveIconPath = './icons/fast-active.svg';
+let documentActiveIconPath = './icons/document-active.svg';
+let sessionIconsLoaded = true;
+
 try {
     const stored = localStorage.getItem("sessions");
     sessions = stored ? JSON.parse(stored) : [];
@@ -60,23 +66,24 @@ const showSessionTypeModal = () => {
     try {
         const modal = document.createElement("div");
         modal.className = "modal-overlay";
-        
-        const lightningIcon = getIcon('lightningLarge', 'icon-accent');
-        const documentIcon = getIcon('documentLarge', 'icon-accent');
-        
+
         modal.innerHTML = `
             <div class="modal" tabindex="0">
                 <h2>Choose Session Type</h2>
                 <div class="session-type-options">
                     <div class="session-type-option" data-type="${SESSION_TYPES.FAST}">
-                        <div class="session-type-icon">${lightningIcon}</div>
+                        <div class="session-type-icon icon-accent">
+                            <img src="${lightningIconPath}" alt="Fast icon" class="session-type-icon-img" width="32" height="32" />
+                        </div>
                         <div class="session-type-title">Fast</div>
                         <div class="session-type-description">Quick text translation</div>
                     </div>
                     <div class="session-type-option" data-type="${SESSION_TYPES.DOC}">
-                        <div class="session-type-icon">${documentIcon}</div>
+                        <div class="session-type-icon icon-accent">
+                            <img src="${documentIconPath}" alt="Doc icon" class="session-type-icon-img" width="32" height="32" />
+                        </div>
                         <div class="session-type-title">Doc</div>
-                        <div class="session-type-description">Document processing with PDF output</div>
+                        <div class="session-type-description">Document processing</div>
                     </div>
                 </div>
             </div>
@@ -86,6 +93,25 @@ const showSessionTypeModal = () => {
 
         const modalBox = modal.querySelector('.modal');
         if (modalBox) modalBox.focus();
+
+        modal.querySelectorAll('.session-type-option').forEach(option => {
+            const type = option.dataset.type;
+            const img = option.querySelector('img');
+            let normalIcon, activeIcon;
+            if (type === SESSION_TYPES.DOC) {
+                normalIcon = documentIconPath;
+                activeIcon = documentActiveIconPath;
+            } else {
+                normalIcon = lightningIconPath;
+                activeIcon = lightningActiveIconPath;
+            }
+            option.addEventListener('mouseenter', () => {
+                img.src = activeIcon;
+            });
+            option.addEventListener('mouseleave', () => {
+                img.src = normalIcon;
+            });
+        });
 
         const mousedownHandler = (e) => {
             if (e.target === modal) {
@@ -202,19 +228,24 @@ const renderSessions = () => {
         if (!DOM.sessionsEl) {
             return;
         }
-        
         DOM.sessionsEl.innerHTML = "";
-        
+
         sessions.forEach((session, index) => {
             try {
-                const sessionDiv = document.createElement("div");
-                const typeIcon = session.type === SESSION_TYPES.DOC ? 
-                    getIcon('document', 'session-icon') : 
-                    getIcon('lightning', 'session-icon');
+                const isActive = index === currentSessionIndex;
+                let typeIconPath;
+                if (session.type === SESSION_TYPES.DOC) {
+                    typeIconPath = isActive ? documentActiveIconPath : documentIconPath;
+                } else {
+                    typeIconPath = isActive ? lightningActiveIconPath : lightningIconPath;
+                }
                     
-                sessionDiv.className = `session-item${index === currentSessionIndex ? " active" : ""}`;
+                const sessionDiv = document.createElement("div");
+                sessionDiv.className = `session-item${isActive ? " active" : ""}`;
                 sessionDiv.innerHTML = `
-                    <div class="session-type-badge">${typeIcon}</div>
+                    <div class="session-type-badge">
+                        <img src="${typeIconPath}" alt="${session.type} icon" class="session-type-icon-img" width="20" height="20" />
+                    </div>
                     <div class="title">${session.title || "Untitled"}</div>
                     <button class="menu-btn">⋯</button>
                 `;
