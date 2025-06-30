@@ -1,9 +1,9 @@
 "use strict";
 
 const API_URLS = {
-    translate: "https://translate.teamcardinalis.com/stacy/translate",
+    translate: "https://rds.teamcardinalis.com/stacy/translate",
     detect: "https://translate.googleapis.com/translate_a/single?client=gtx",
-    models: "https://translate.teamcardinalis.com/stacy/models"
+    models: "https://rds.teamcardinalis.com/stacy/models"
 };
 
 const detectLang = async txt => {
